@@ -42,7 +42,6 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue
@@ -272,7 +271,6 @@ export function AdditionalField({
         <FieldLabel htmlFor={name}>{field.label}</FieldLabel>
 
         <Select
-          items={field.options ?? []}
           name={name}
           defaultValue={
             field.defaultValue != null ? String(field.defaultValue) : undefined
@@ -285,13 +283,11 @@ export function AdditionalField({
           </SelectTrigger>
 
           <SelectContent>
-            <SelectGroup>
-              {field.options?.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
+            {field.options?.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 

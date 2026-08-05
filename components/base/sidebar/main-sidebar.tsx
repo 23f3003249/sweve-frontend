@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useState } from "react"
+import { createContext, Fragment, useContext, useState, type ReactNode } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -14,6 +14,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 
 type NavigationItem = {
     label: string
@@ -22,38 +23,66 @@ type NavigationItem = {
     separatorAfter?: boolean
 }
 
-export function MainSidebar() {
-    const pathname = usePathname()
+const navigationItems: NavigationItem[] = [
+    {
+        label: "Home",
+        href: "/",
+        icon: House,
+    },
+    {
+        label: "Events",
+        href: "/events",
+        icon: Compass,
+    },
+    {
+        label: "Organizers",
+        href: "/organizations",
+        icon: Building2,
+        separatorAfter: true,
+    },
+    {
+        label: "My Tickets",
+        href: "/tickets",
+        icon: Ticket,
+        separatorAfter: true,
+    },
+    {
+        label: "Dashboard",
+        href: "/dashboard",
+        icon: LayoutDashboard,
+    },
+]
 
-    const [navigation] = useState<NavigationItem[]>([
-        {
-            label: "Home",
-            href: "/",
-            icon: House,
-        },
-        {
-            label: "Discover",
-            href: "/events",
-            icon: Compass,
-        },
-        {
-            label: "Organizers",
-            href: "/organizations",
-            icon: Building2,
-            separatorAfter: true,
-        },
-        {
-            label: "My Tickets",
-            href: "/tickets",
-            icon: Ticket,
-            separatorAfter: true,
-        },
-        {
-            label: "Dashboard",
-            href: "/dashboard",
-            icon: LayoutDashboard,
-        },
-    ])
+type NavigationContextValue = {
+    navigation: NavigationItem[]
+    setNavigation: React.Dispatch<React.SetStateAction<NavigationItem[]>>
+}
+
+const NavigationContext = createContext<NavigationContextValue | undefined>(undefined)
+
+export function NavigationProvider({ children }: { children: ReactNode }) {
+    const [navigation, setNavigation] = useState<NavigationItem[]>(navigationItems)
+
+    return (
+        <NavigationContext.Provider value={{ navigation, setNavigation }}>
+            {children}
+        </NavigationContext.Provider>
+    )
+}
+
+export function useNavigation() {
+    const context = useContext(NavigationContext)
+
+    if (!context) {
+        throw new Error("useNavigation must be used within a NavigationProvider")
+    }
+
+    return context
+}
+
+export function MainSidebar() {
+    const { navigation } = useNavigation()
+    const pathname = usePathname()
 
     const isActive = (href: string) => {
         if (href === "/") {
@@ -86,7 +115,7 @@ export function MainSidebar() {
                             active={isActive(item.href)}
                         />
 
-                        {item.separatorAfter && <SidebarSeparator />}
+                        {item.separatorAfter && <Separator />}
                     </Fragment>
                 ))}
             </nav>
@@ -131,13 +160,5 @@ function SidebarItem({
                 </span>
             </Link>
         </Button>
-    )
-}
-
-function SidebarSeparator() {
-    return (
-        <div className="my-1.5 px-2">
-            <div className="h-px bg-border" />
-        </div>
     )
 }

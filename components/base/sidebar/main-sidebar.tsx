@@ -1,5 +1,6 @@
 "use client"
 
+import { Fragment, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -18,44 +19,41 @@ type NavigationItem = {
     label: string
     href: string
     icon: LucideIcon
+    separatorAfter?: boolean
 }
-
-const mainNavigation: NavigationItem[] = [
-    {
-        label: "Home",
-        href: "/",
-        icon: House,
-    },
-    {
-        label: "Discover",
-        href: "/events",
-        icon: Compass,
-    },
-    {
-        label: "Organizers",
-        href: "/organizations",
-        icon: Building2,
-    },
-]
-
-const ticketNavigation: NavigationItem[] = [
-    {
-        label: "My Tickets",
-        href: "/tickets",
-        icon: Ticket,
-    },
-]
-
-const dashboardNavigation: NavigationItem[] = [
-    {
-        label: "Dashboard",
-        href: "/dashboard",
-        icon: LayoutDashboard,
-    },
-]
 
 export function MainSidebar() {
     const pathname = usePathname()
+
+    const [navigation] = useState<NavigationItem[]>([
+        {
+            label: "Home",
+            href: "/",
+            icon: House,
+        },
+        {
+            label: "Discover",
+            href: "/events",
+            icon: Compass,
+        },
+        {
+            label: "Organizers",
+            href: "/organizations",
+            icon: Building2,
+            separatorAfter: true,
+        },
+        {
+            label: "My Tickets",
+            href: "/tickets",
+            icon: Ticket,
+            separatorAfter: true,
+        },
+        {
+            label: "Dashboard",
+            href: "/dashboard",
+            icon: LayoutDashboard,
+        },
+    ])
 
     const isActive = (href: string) => {
         if (href === "/") {
@@ -81,35 +79,15 @@ export function MainSidebar() {
                 className="flex flex-col gap-1 p-1.5"
                 aria-label="Main navigation"
             >
-                {/* Main navigation */}
-                {mainNavigation.map((item) => (
-                    <SidebarItem
-                        key={item.href}
-                        item={item}
-                        active={isActive(item.href)}
-                    />
-                ))}
+                {navigation.map((item) => (
+                    <Fragment key={item.href}>
+                        <SidebarItem
+                            item={item}
+                            active={isActive(item.href)}
+                        />
 
-                <SidebarSeparator />
-
-                {/* Tickets */}
-                {ticketNavigation.map((item) => (
-                    <SidebarItem
-                        key={item.href}
-                        item={item}
-                        active={isActive(item.href)}
-                    />
-                ))}
-
-                <SidebarSeparator />
-
-                {/* Dashboard */}
-                {dashboardNavigation.map((item) => (
-                    <SidebarItem
-                        key={item.href}
-                        item={item}
-                        active={isActive(item.href)}
-                    />
+                        {item.separatorAfter && <SidebarSeparator />}
+                    </Fragment>
                 ))}
             </nav>
         </aside>

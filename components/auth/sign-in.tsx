@@ -226,13 +226,13 @@ export function SignIn({
                           ? localization.auth.fieldRequired
                           : el.validity.tooShort
                             ? localization.auth.tooShort.replace(
-                                "{{min}}",
-                                String(min)
-                              )
+                              "{{min}}",
+                              String(min)
+                            )
                             : localization.auth.tooLong.replace(
-                                "{{max}}",
-                                String(max)
-                              )
+                              "{{max}}",
+                              String(max)
+                            )
 
                         setFieldErrors((prev) => ({
                           ...prev,

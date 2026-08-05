@@ -32,8 +32,7 @@ async function AuthPageContent({
   }
 
   return (
-    <div className="flex justify-center my-auto p-4 md:p-6">
-      <Auth path={path} />
-    </div>
+    <Auth path={path} />
   )
+
 }

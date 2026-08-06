@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { BookmarkIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -13,7 +14,13 @@ export function Navbar() {
             <nav className="flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-8 bg-background/50 backdrop-blur-md border-b border-border/50 shadow-md">
                 {/* Brand */}
                 <Link href="/" className="text-xl font-semibold tracking-tight text-foreground">
-                    sweve
+                    <Image
+                        className="dark:invert"
+                        src="/sweve-long.svg"
+                        alt="Sweve logo"
+                        width={110}
+                        height={32}
+                    />
                 </Link>
 
                 {/* Actions */}

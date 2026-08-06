@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 import { Ripple } from "@/components/ui/ripple"
 
@@ -23,7 +24,14 @@ export default function AuthLayout({
                     href="/"
                     className="mb-4 flex items-center gap-2 font-semibold"
                 >
-                    Sweve Inc.
+                    <Image
+                        className="dark:invert"
+                        src="/sweve-long.svg"
+                        alt="Sweve logo"
+                        width={130}
+                        height={32}
+                        loading='eager'
+                    />
                 </Link>
                 {children}
             </div>

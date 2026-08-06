@@ -20,6 +20,7 @@ export function Navbar() {
                         alt="Sweve logo"
                         width={110}
                         height={32}
+                        loading='eager'
                     />
                 </Link>
 

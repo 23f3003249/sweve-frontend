@@ -9,7 +9,6 @@ import type { ReactNode } from "react"
 import { deleteUserPlugin } from "@/lib/auth/delete-user-plugin"
 import { authClient } from "@/lib/auth-client"
 import { getQueryClient } from "@/lib/query-client"
-import { Toaster } from "@/components/ui/sonner"
 
 import { themePlugin } from "@/lib/auth/theme-plugin"
 import { useTheme } from "next-themes"
@@ -32,7 +31,6 @@ export function Providers({ children }: { children: ReactNode }) {
       >
         {children}
 
-        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   )

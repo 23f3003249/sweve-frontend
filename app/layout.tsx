@@ -47,7 +47,11 @@ export default function RootLayout({
 
             <TooltipProvider>
               {children}
-              <Toaster />
+              <Toaster 
+                position="top-right"
+                offset={70}
+                mobileOffset={32}
+              />
             </TooltipProvider>
 
           </Providers>

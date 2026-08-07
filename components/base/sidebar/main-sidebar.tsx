@@ -1,10 +1,7 @@
 "use client"
 
 import {
-    createContext,
-    Fragment,
-    useContext,
-    useState,
+    createContext, Fragment, useContext, useState,
     type Dispatch,
     type ReactNode,
     type SetStateAction,
@@ -12,25 +9,13 @@ import {
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
-    Building2,
-    Compass,
-    House,
-    LayoutDashboard,
-    MoreHorizontal,
-    Ticket,
+    Building2, Compass, House, LayoutDashboard, ChevronLeft, ChevronRight, Ticket, Search,
     type LucideIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 type NavigationItem = {
     label: string
@@ -102,24 +87,27 @@ export function useNavigation() {
 export function MainSidebar() {
     const { navigation } = useNavigation()
     const pathname = usePathname()
-
+    const [mobilePage, setMobilePage] = useState(0)
     const isActive = (href: string) => {
         if (href === "/") return pathname === "/"
         return pathname.startsWith(href)
     }
 
-    const mobileLimit = 5
-    const hasMore = navigation.length > mobileLimit
-    const mobileVisibleItems = hasMore
-        ? navigation.slice(0, mobileLimit - 1)
-        : navigation
-    const mobileOverflowItems = hasMore
-        ? navigation.slice(mobileLimit - 1)
-        : []
-
-    const isOverflowActive = mobileOverflowItems.some((item) =>
-        isActive(item.href)
-    )
+    const MOBILE_NAV_SLOTS = 5
+    const hasMore = navigation.length > MOBILE_NAV_SLOTS
+    const MOBILE_PAGE_SIZE = MOBILE_NAV_SLOTS - 1
+    const navigationPages = hasMore ? Array.from(
+        {
+            length: Math.ceil(navigation.length / MOBILE_PAGE_SIZE),
+        },
+        (_, index) =>
+            navigation.slice(
+                index * MOBILE_PAGE_SIZE,
+                index * MOBILE_PAGE_SIZE + MOBILE_PAGE_SIZE
+            ))
+        : [navigation]
+    const currentPage = mobilePage % navigationPages.length
+    const mobileVisibleItems = navigationPages[currentPage]
 
     return (
         <>
@@ -175,14 +163,25 @@ export function MainSidebar() {
                     ))}
 
                     {hasMore && (
-                        <MobileMoreMenu
-                            items={mobileOverflowItems}
-                            active={isOverflowActive}
-                            isActive={isActive}
-                        />
+                        <Button variant="ghost" className="h-11 w-11 shrink-0 rounded-xl p-0"
+                            onClick={() =>
+                                setMobilePage((prev) => (prev + 1) % navigationPages.length)
+                            }
+                            aria-label={
+                                currentPage === navigationPages.length - 1
+                                    ? "Previous navigation"
+                                    : "Next navigation"
+                            }
+                        >
+                            {currentPage === navigationPages.length - 1 ? (
+                                <ChevronLeft className="size-5" />
+                            ) : (
+                                <ChevronRight className="size-5" />
+                            )}
+                        </Button>
                     )}
                 </div>
-            </nav>
+            </nav >
         </>
     )
 }
@@ -236,76 +235,3 @@ function SidebarItem({
     )
 }
 
-function MobileMoreMenu({
-    items,
-    active,
-    isActive,
-}: {
-    items: NavigationItem[]
-    active: boolean
-    isActive: (href: string) => boolean
-}) {
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    variant="ghost"
-                    className={cn(
-                        "h-11 w-11 shrink-0 justify-center rounded-xl p-0",
-                        "text-muted-foreground",
-                        "hover:bg-secondary hover:text-foreground",
-                        active && "bg-secondary text-foreground"
-                    )}
-                    aria-label="More navigation"
-                >
-                    <MoreHorizontal className="size-5 shrink-0" />
-                </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent
-                align="end"
-                side="top"
-                sideOffset={8}
-                className={cn(
-                    "w-auto",
-                    "my-2", "rounded-lg",
-                    "border-border/50",
-                    "bg-background/90 backdrop-blur-xl",
-                    "shadow-lg"
-                )}
-            >
-                {items.map((item, index) => {
-                    const Icon = item.icon
-                    const itemActive = isActive(item.href)
-
-                    return (
-                        <Fragment key={item.href}>
-                            <DropdownMenuItem asChild>
-                                <Link
-                                    href={item.href}
-                                    aria-current={
-                                        itemActive ? "page" : undefined
-                                    }
-                                    className={cn(
-                                        "flex items-center gap-3",
-                                        itemActive &&
-                                        "bg-secondary text-foreground"
-                                    )}
-                                >
-                                    <Icon className="size-4 shrink-0" />
-
-                                    <span>{item.label}</span>
-                                </Link>
-                            </DropdownMenuItem>
-
-                            {item.separatorAfter &&
-                                index !== items.length - 1 && (
-                                    <DropdownMenuSeparator />
-                                )}
-                        </Fragment>
-                    )
-                })}
-            </DropdownMenuContent>
-        </DropdownMenu>
-    )
-}

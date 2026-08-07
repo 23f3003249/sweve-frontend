@@ -118,7 +118,7 @@ export function MainSidebar() {
                     "w-14 hover:w-52",
                     "overflow-hidden rounded-2xl",
                     "border border-border/50",
-                    "bg-background/90 backdrop-blur-xl",
+                    "bg-background/60 backdrop-blur-xl",
                     "shadow-lg",
                     "transition-[width] duration-300 ease-out"
                 )}
@@ -142,24 +142,27 @@ export function MainSidebar() {
             </aside>
 
             {/* Mobile bottom bar */}
-            <nav
+            <aside
                 className={cn(
                     "fixed inset-x-0 bottom-0 z-40 sm:hidden",
                     "border-t border-border/50",
-                    "bg-background/90 backdrop-blur-xl",
+                    "bg-background/60 backdrop-blur-xl",
                     "shadow-lg",
                     "pb-[env(safe-area-inset-bottom)]"
                 )}
                 aria-label="Main navigation"
             >
-                <div className="flex items-center justify-around gap-1 px-2 py-2">
+                <nav className="flex items-center justify-around gap-1 px-2 py-2">
                     {mobileVisibleItems.map((item) => (
-                        <SidebarItem
-                            key={item.href}
-                            item={item}
-                            active={isActive(item.href)}
-                            mobile
-                        />
+                        <Fragment key={item.href}>
+                            <SidebarItem
+                                item={item}
+                                active={isActive(item.href)}
+                                mobile
+                            />
+
+                            {item.separatorAfter && <Separator orientation="vertical" />}
+                        </Fragment>
                     ))}
 
                     {hasMore && (
@@ -180,8 +183,8 @@ export function MainSidebar() {
                             )}
                         </Button>
                     )}
-                </div>
-            </nav >
+                </nav>
+            </aside>
         </>
     )
 }

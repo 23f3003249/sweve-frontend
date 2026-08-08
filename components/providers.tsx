@@ -12,6 +12,7 @@ import { getQueryClient } from "@/lib/query-client"
 
 import { themePlugin } from "@/lib/auth/theme-plugin"
 import { useTheme } from "next-themes"
+import { usernamePlugin } from "@better-auth-ui/core/plugins"
 
 export function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
@@ -21,12 +22,19 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <AuthProvider
         authClient={authClient}
-        redirectTo="/settings/account"
+        redirectTo="/"
         socialProviders={["google", "github"]}
         navigate={({ to, replace }) =>
           replace ? router.replace(to) : router.push(to)
         }
-        plugins={[deleteUserPlugin(), themePlugin({ useTheme })]}
+        plugins={[
+          usernamePlugin({
+            usernamePrefix: "@",
+            localization: { usernamePlaceholder: "username" }
+          }),
+          deleteUserPlugin(), 
+          themePlugin({ useTheme })
+        ]}
         Link={Link}
       >
         {children}

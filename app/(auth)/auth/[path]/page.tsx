@@ -4,6 +4,10 @@ import { notFound } from "next/navigation"
 
 import { Auth } from "@/components/auth/auth"
 
+export function generateStaticParams() {
+  return Object.values(viewPaths.auth).map((path: string | undefined) => ({ path }))
+}
+
 export default function AuthPage({
   params
 }: {

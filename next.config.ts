@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
+  partialPrefetching: true,
   async rewrites() {
     return [
       {
@@ -18,7 +19,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/api/auth/:path*",
-        destination: "http://localhost:4000/api/auth/:path*", 
+        destination: (process.env.BACKEND_URL || "http://localhost:4000") + "/api/auth/:path*", 
       },
     ];
   },

@@ -1,15 +1,12 @@
 "use client"
 
 import {
-    createContext, Fragment, useContext, useState,
-    type Dispatch,
-    type ReactNode,
-    type SetStateAction,
+    Fragment, useState,
 } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
-    Building2, Compass, House, LayoutDashboard, ChevronLeft, ChevronRight, Ticket, Search,
+    Building2, Compass, House, LayoutDashboard, ChevronLeft, ChevronRight, Ticket, Search, Info,
     type LucideIcon,
 } from "lucide-react"
 
@@ -17,75 +14,29 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
-type NavigationItem = {
+export type NavigationItem = {
     label: string
     href: string
-    icon: LucideIcon
+    icon?: LucideIcon
     separatorAfter?: boolean
 }
 
-const navigationItems: NavigationItem[] = [
-    {
-        label: "Home",
-        href: "/",
-        icon: House,
-    },
-    {
-        label: "Events",
-        href: "/events",
-        icon: Compass,
-    },
-    {
-        label: "Organizers",
-        href: "/organizations",
-        icon: Building2,
-        separatorAfter: true,
-    },
-    {
-        label: "My Tickets",
-        href: "/tickets",
-        icon: Ticket,
-        separatorAfter: true,
-    },
-    {
-        label: "Dashboard",
-        href: "/dashboard",
-        icon: LayoutDashboard,
-    },
-]
-
-type NavigationContextValue = {
-    navigation: NavigationItem[]
-    setNavigation: Dispatch<SetStateAction<NavigationItem[]>>
+const iconMap: Record<string, LucideIcon> = {
+    "/": House,
+    "/events": Compass,
+    "/organizations": Building2,
+    "/tickets": Ticket,
+    "/dashboard": LayoutDashboard,
+    "/search": Search,
 }
 
-const NavigationContext = createContext<NavigationContextValue | undefined>(
-    undefined
-)
+export function MainSidebar({ navItems }: { navItems: NavigationItem[] }) {
+    navItems.forEach((item) => {
+        if (!item.icon) {
+            item.icon = iconMap[item.href]
+        }
+    })
 
-export function NavigationProvider({ children }: { children: ReactNode }) {
-    const [navigation, setNavigation] =
-        useState<NavigationItem[]>(navigationItems)
-
-    return (
-        <NavigationContext.Provider value={{ navigation, setNavigation }}>
-            {children}
-        </NavigationContext.Provider>
-    )
-}
-
-export function useNavigation() {
-    const context = useContext(NavigationContext)
-
-    if (!context) {
-        throw new Error("useNavigation must be used within a NavigationProvider")
-    }
-
-    return context
-}
-
-export function MainSidebar() {
-    const { navigation } = useNavigation()
     const pathname = usePathname()
     const [mobilePage, setMobilePage] = useState(0)
     const isActive = (href: string) => {
@@ -94,18 +45,21 @@ export function MainSidebar() {
     }
 
     const MOBILE_NAV_SLOTS = 5
-    const hasMore = navigation.length > MOBILE_NAV_SLOTS
+    const hasMore = navItems.length > MOBILE_NAV_SLOTS
     const MOBILE_PAGE_SIZE = MOBILE_NAV_SLOTS - 1
-    const navigationPages = hasMore ? Array.from(
-        {
-            length: Math.ceil(navigation.length / MOBILE_PAGE_SIZE),
-        },
-        (_, index) =>
-            navigation.slice(
-                index * MOBILE_PAGE_SIZE,
-                index * MOBILE_PAGE_SIZE + MOBILE_PAGE_SIZE
-            ))
-        : [navigation]
+    const navigationPages = hasMore
+        ? Array.from(
+            {
+                length: Math.ceil(navItems.length / MOBILE_PAGE_SIZE),
+            },
+            (_, index) => {
+                const maxStartIndex = Math.max(0, navItems.length - MOBILE_PAGE_SIZE)
+                const startIndex = Math.min(index * MOBILE_PAGE_SIZE, maxStartIndex)
+
+                return navItems.slice(startIndex, startIndex + MOBILE_PAGE_SIZE)
+            }
+        )
+        : [navItems]
     const currentPage = mobilePage % navigationPages.length
     const mobileVisibleItems = navigationPages[currentPage]
 
@@ -127,7 +81,7 @@ export function MainSidebar() {
                     className="flex flex-col gap-1 p-1.5"
                     aria-label="Main navigation"
                 >
-                    {navigation.map((item) => (
+                    {navItems.map((item) => (
                         <Fragment key={item.href}>
                             <SidebarItem
                                 item={item}
@@ -154,15 +108,12 @@ export function MainSidebar() {
             >
                 <nav className="flex items-center justify-around gap-1 px-2 py-2">
                     {mobileVisibleItems.map((item) => (
-                        <Fragment key={item.href}>
-                            <SidebarItem
-                                item={item}
-                                active={isActive(item.href)}
-                                mobile
-                            />
-
-                            {item.separatorAfter && <Separator orientation="vertical" />}
-                        </Fragment>
+                        <SidebarItem
+                            key={item.href}
+                            item={item}
+                            active={isActive(item.href)}
+                            mobile
+                        />
                     ))}
 
                     {hasMore && (
@@ -198,7 +149,7 @@ function SidebarItem({
     active: boolean
     mobile: boolean
 }) {
-    const Icon = item.icon
+    const Icon = item.icon || Info
 
     return (
         <Button
@@ -219,6 +170,7 @@ function SidebarItem({
                 href={item.href}
                 aria-label={item.label}
                 aria-current={active ? "page" : undefined}
+                prefetch={true}
             >
                 <Icon className={cn("shrink-0", mobile ? "size-5" : "size-4")} />
 

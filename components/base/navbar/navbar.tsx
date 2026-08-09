@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { BookmarkIcon } from 'lucide-react'
+import { BookmarkIcon, User } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -37,7 +37,9 @@ export function Navbar() {
                     </Button>
 
                     {/* Profile */}
-                    <UserButton size="icon" />
+                    <UserButton className='cursor-pointer' dropdownClassName='cursor-pointer' size="icon" align='end' sideOffset={10} links={[
+                        {className: 'cursor-pointer', label: "Profile", href: "/user", icon: <><User /></>, visibility: "authenticated"}
+                    ]} />
                 </div>
             </nav>
         </header>

@@ -1,5 +1,30 @@
 import { Navbar } from "@/components/base/navbar/navbar"
-import { MainSidebar, NavigationProvider } from "@/components/base/sidebar/main-sidebar"
+import { MainSidebar, type NavigationItem } from "@/components/base/sidebar/main-sidebar"
+
+const navigationItems: NavigationItem[] = [
+    {
+        label: "Home",
+        href: "/",
+    },
+    {
+        label: "Events",
+        href: "/events",
+    },
+    {
+        label: "Organizers",
+        href: "/organizations",
+        separatorAfter: true,
+    },
+    {
+        label: "My Tickets",
+        href: "/tickets",
+        separatorAfter: true,
+    },
+    {
+        label: "Dashboard",
+        href: "/dashboard",
+    },
+]
 
 export default function BaseLayout({
     children,
@@ -7,14 +32,12 @@ export default function BaseLayout({
     children: React.ReactNode
 }>) {
     return (
-        <NavigationProvider>
-            <div className="min-h-dvh bg-background">
-                <Navbar />
-                <MainSidebar />
-                <main>
-                    {children}
-                </main>
-            </div>
-        </NavigationProvider>
+        <div className="min-h-dvh bg-background">
+            <Navbar />
+            <MainSidebar navItems={navigationItems} />
+            <main>
+                {children}
+            </main>
+        </div>
     )
 }

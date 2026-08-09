@@ -37,6 +37,7 @@ export type UserButtonLinkVisibility =
 
 /** A simple link entry rendered as a `DropdownMenuItem` in the `UserButton` menu. */
 export type UserButtonLink = {
+  className?: string
   /** Visible label. */
   label: ReactNode
   /** Destination URL. */
@@ -54,6 +55,7 @@ export type UserButtonLink = {
 
 export type UserButtonProps = {
   className?: string
+  dropdownClassName?: string
   align?: "center" | "end" | "start" | undefined
   sideOffset?: number
   size?: "default" | "icon"
@@ -77,10 +79,11 @@ function renderUserLink(
 ): ReactNode {
   if (isValidElement(link)) return link
 
-  const { label, href, icon, variant } = link
+  const { className, label, href, icon, variant } = link
   return (
     <DropdownMenuItem
       key={fallbackKey}
+      className={className}
       variant={variant}
       onClick={() => navigate({ to: href })}
     >
@@ -107,6 +110,7 @@ function renderUserLink(
  */
 export function UserButton({
   className,
+  dropdownClassName,
   align,
   sideOffset,
   size = "default",
@@ -199,6 +203,7 @@ export function UserButton({
 
             {!hideSettings && (
               <DropdownMenuItem
+                className={dropdownClassName}
                 onClick={() =>
                   navigate({
                     to: `${basePaths.settings}/${viewPaths.settings.account}`
@@ -220,6 +225,8 @@ export function UserButton({
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
+              className={dropdownClassName}
+              variant="destructive"
               onClick={() =>
                 navigate({
                   to: `${basePaths.auth}/${viewPaths.auth.signOut}`
@@ -236,6 +243,7 @@ export function UserButton({
             {userLinks}
 
             <DropdownMenuItem
+              className={dropdownClassName}
               onClick={() =>
                 navigate({
                   to: `${basePaths.auth}/${viewPaths.auth.signIn}`
@@ -248,6 +256,7 @@ export function UserButton({
             </DropdownMenuItem>
 
             <DropdownMenuItem
+              className={dropdownClassName}
               onClick={() =>
                 navigate({
                   to: `${basePaths.auth}/${viewPaths.auth.signUp}`

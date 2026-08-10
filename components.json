@@ -24,6 +24,7 @@
   "registries": {
     "@better-auth-ui": "https://better-auth-ui.com/r/{style}/{name}.json",
     "@magicui": "https://magicui.design/r/{name}",
-    "@shadcn-studio": "https://shadcnstudio.com/r/{style}/{name}.json"
+    "@shadcn-studio": "https://shadcnstudio.com/r/{style}/{name}.json",
+    "@flx": "https://ui.flexnative.com/r/{name}.json"
   }
 }

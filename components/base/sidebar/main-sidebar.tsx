@@ -27,12 +27,26 @@ export type NavigationItem = {
      */
     special?: boolean
     /**
-     * Uses the anchor key from localStorage to decide whether to show this item or not. If the value in localStorage does not match, the item will be hidden.
+     * Uses the anchor key from localStorage to decide whether to show an item or not. 
+     * If the value in localStorage is not set `true`, the item will be hidden.
      * This is useful for showing/hiding items based on user state, such as user onboarding status.
      * 
-     * @example If you want to show an item only when the user is just onboarded, you can set `localStorage.setItem('beginner', 'true')` and then set `localPropAnchor: 'beginner'` on the navigation item. The item will only be shown when the value in localStorage is 'true'.
+     * @usecase If you want to show an item only when the user is just onboarded, 
+     * you can set `localStorage.setItem('beginner', 'true')` and then set `localPropAnchor: 'beginner'` on the navigation item. 
+     * The item will only be shown when the value in localStorage is 'true'.
      */
     localPropAnchor?: string
+    /**
+     * Uses the anchor key from localStorage to decide whether to show an item or not. 
+     * If the value in localStorage is set `true`, the item will be hidden.
+     * This is useful for showing/hiding items based on user state, such as user onboarding status.
+     * 
+     * @behavior Works opposite to `localPropAnchor`. If the value in localStorage matches, the item will be hidden.
+     * @usecase If you don't want to show an item only when the user is just onboarded, 
+     * you can set `localStorage.setItem('beginner', 'true')` and then set `HlocalPropAnchor: 'beginner'` on the navigation item. 
+     * The item will be hidden when the value in localStorage is 'true'.
+     */
+    HlocalPropAnchor?: string
 }
 
 const iconMap: Record<string, LucideIcon> = {
@@ -176,6 +190,27 @@ function SidebarItem({
                 setIsVisible(true)
             } else {
                 setIsVisible(false)
+            }
+        }, [path])
+
+
+        return (
+            isVisible && 
+            <Item item={item} active={active} mobile={mobile} Icon={Icon} />
+        )
+    }
+    
+    if (item.HlocalPropAnchor) {
+        const [isVisible, setIsVisible] = useState(true)
+        const path = usePathname()
+
+        useEffect(() => {
+            const anchor = localStorage.getItem(item.HlocalPropAnchor!);
+
+            if (anchor === "true") {
+                setIsVisible(false)
+            } else {
+                setIsVisible(true)
             }
         }, [path])
 

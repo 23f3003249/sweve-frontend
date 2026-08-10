@@ -27,6 +27,7 @@ const navigationItems: NavigationItem[] = [
     {
         label: "Dashboard",
         href: "/dashboard",
+        // HlocalPropAnchor: "beginner",
     },
 ]
 

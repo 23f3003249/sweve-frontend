@@ -2,6 +2,7 @@
 
 import { getViewURL } from "@better-auth-ui/core"
 import { useAuth, useChangeEmail, useSession } from "@better-auth-ui/react"
+import { useIsHydrated } from "@/components/auth/use-is-hydrated"
 import { type SyntheticEvent, useState } from "react"
 import { toast } from "sonner"
 
@@ -29,6 +30,7 @@ export type ChangeEmailProps = {
 export function ChangeEmail({ className }: ChangeEmailProps) {
   const { authClient, basePaths, baseURL, localization, viewPaths } = useAuth()
   const { data: session } = useSession(authClient)
+  const isHydrated = useIsHydrated()
 
   const { mutate: changeEmail, isPending } = useChangeEmail(authClient, {
     onSuccess: () => toast.success(localization.settings.changeEmailSuccess)
@@ -59,10 +61,11 @@ export function ChangeEmail({ className }: ChangeEmailProps) {
       </h2>
 
       <form onSubmit={handleSubmit}>
-        <Card className={cn(className)}>
-          <CardContent className="flex flex-col gap-6">
-            <Field data-invalid={!!fieldErrors.email}>
-              <FieldLabel htmlFor="email">{localization.auth.email}</FieldLabel>
+        {isHydrated && 
+          <Card className={cn(className)}>
+            <CardContent className="flex flex-col gap-6">
+              <Field data-invalid={!!fieldErrors.email}>
+                <FieldLabel htmlFor="email">{localization.auth.email}</FieldLabel>
 
               {session ? (
                 <Input
@@ -107,7 +110,7 @@ export function ChangeEmail({ className }: ChangeEmailProps) {
               {localization.settings.updateEmail}
             </Button>
           </CardFooter>
-        </Card>
+        </Card>}
       </form>
     </div>
   )

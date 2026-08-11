@@ -5,6 +5,7 @@ import {
   useAuth,
   useSession
 } from "@better-auth-ui/react"
+import { useIsHydrated } from "@/components/auth/use-is-hydrated"
 import type { User } from "better-auth"
 import { User2 } from "lucide-react"
 import type { ReactNode } from "react"
@@ -44,6 +45,8 @@ export function UserAvatar({
     { enabled: !user && !isPending }
   )
 
+  const isHydrated = useIsHydrated()
+
   if ((isPending || sessionPending) && !user) {
     return <Skeleton className={cn("size-8 rounded-full", className)} />
   }
@@ -59,6 +62,7 @@ export function UserAvatar({
     .toUpperCase()
 
   return (
+    isHydrated &&
     <Avatar
       className={cn(
         "size-8 bg-muted text-foreground text-sm rounded-full",

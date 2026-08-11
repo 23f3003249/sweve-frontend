@@ -3,14 +3,20 @@
 import { authMutationKeys } from "@better-auth-ui/core"
 import {
   AuthPrompts,
+  type UsernameAuthClient,
   useAuth,
+  useAuthPlugin,
   useFetchOptions,
-  useSignInEmail
+  useSignInEmail,
+  useSignInUsername
 } from "@better-auth-ui/react"
 import { useIsMutating } from "@tanstack/react-query"
 import { Eye, EyeOff } from "lucide-react"
 import { type SyntheticEvent, useState } from "react"
-
+import {
+  ProviderButtons,
+  type SocialLayout
+} from "@/components/auth/provider-buttons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -31,29 +37,30 @@ import {
 } from "@/components/ui/input-group"
 import { Spinner } from "@/components/ui/spinner"
 import { useSignInContinuation } from "@/lib/auth/use-sign-in-continuation"
+import { usernamePlugin } from "@/lib/auth/username-plugin"
 import { cn } from "@/lib/utils"
-import { LastUsedBadge } from "./last-login-method/last-used-badge"
-import { ProviderButtons, type SocialLayout } from "./provider-buttons"
+import { LastUsedBadge } from "../last-login-method/last-used-badge"
 
-export type SignInProps = {
+export type SignInUsernameProps = {
   className?: string
   socialLayout?: SocialLayout
   socialPosition?: "top" | "bottom"
 }
 
+function isEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
 /**
- * Render the sign-in form UI with email/password, magic link, and social provider options.
- *
- * @param className - Optional additional container class names
- * @param socialLayout - Layout style for social provider buttons
- * @param socialPosition - Position of social provider buttons; `"top"` or `"bottom"`. Defaults to `"bottom"`.
- * @returns The rendered sign-in UI as a JSX element
+ * Render the username-based sign-in form. Identical to the built-in `<SignIn>`
+ * design but routes non-email inputs through `signInUsername` instead of
+ * `signInEmail`.
  */
-export function SignIn({
+export function SignInUsername({
   className,
   socialLayout,
   socialPosition = "bottom"
-}: SignInProps) {
+}: SignInUsernameProps) {
   const {
     authClient,
     basePaths,
@@ -69,11 +76,12 @@ export function SignIn({
   const { fetchOptions, resetFetchOptions } = useFetchOptions()
   const continueSignIn = useSignInContinuation()
 
+  const { localization: usernameLocalization } = useAuthPlugin(usernamePlugin)
+
   const [password, setPassword] = useState("")
 
-  const { mutate: signInEmail, isPending: signInEmailPending } = useSignInEmail(
-    authClient,
-    {
+  const { mutate: signInEmail, isPending: isSignInEmailPending } =
+    useSignInEmail(authClient, {
       onError: (error, { email }) => {
         setPassword("")
 
@@ -86,9 +94,32 @@ export function SignIn({
 
         resetFetchOptions()
       },
-      onSuccess: (data) => continueSignIn(data)
-    }
-  )
+      onSuccess: (data) => {
+        sessionStorage.removeItem("better-auth-ui.verify-email")
+        continueSignIn(data)
+      }
+    })
+
+  const { mutate: signInUsername, isPending: isSignInUsernamePending } =
+    useSignInUsername(authClient as UsernameAuthClient, {
+      onError: (error) => {
+        setPassword("")
+
+        if (error.error?.code === "EMAIL_NOT_VERIFIED") {
+          sessionStorage.removeItem("better-auth-ui.verify-email")
+
+          navigate({
+            to: `${basePaths.auth}/${viewPaths.auth.verifyEmail}`
+          })
+        }
+
+        resetFetchOptions()
+      },
+      onSuccess: (data) => {
+        sessionStorage.removeItem("better-auth-ui.verify-email")
+        continueSignIn(data)
+      }
+    })
 
   const signInMutating = useIsMutating({
     mutationKey: authMutationKeys.signIn.all
@@ -97,6 +128,7 @@ export function SignIn({
     mutationKey: authMutationKeys.signUp.all
   })
   const isPending = signInMutating + signUpMutating > 0
+  const isSignInPending = isSignInEmailPending || isSignInUsernamePending
 
   const Captcha = plugins.find(
     (plugin) => plugin.captchaComponent
@@ -116,12 +148,21 @@ export function SignIn({
     const email = formData.get("email") as string
     const rememberMe = formData.get("rememberMe") === "on"
 
-    signInEmail({
-      email,
-      password,
-      ...(emailAndPassword?.rememberMe ? { rememberMe } : {}),
-      fetchOptions
-    })
+    if (isEmail(email)) {
+      signInEmail({
+        email,
+        password,
+        ...(emailAndPassword?.rememberMe ? { rememberMe } : {}),
+        fetchOptions
+      })
+    } else {
+      signInUsername({
+        username: email,
+        password,
+        ...(emailAndPassword?.rememberMe ? { rememberMe } : {}),
+        fetchOptions
+      })
+    }
   }
 
   const showSeparator =
@@ -157,15 +198,17 @@ export function SignIn({
               <FieldGroup>
                 <Field data-invalid={!!fieldErrors.email}>
                   <FieldLabel htmlFor="email">
-                    {localization.auth.email}
+                    {usernameLocalization.username}
                   </FieldLabel>
 
                   <Input
                     id="email"
                     name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder={localization.auth.emailPlaceholder}
+                    type="text"
+                    autoComplete="username"
+                    placeholder={
+                      usernameLocalization.usernameOrEmailPlaceholder
+                    }
                     required
                     disabled={isPending}
                     onChange={() => {
@@ -176,14 +219,10 @@ export function SignIn({
                     }}
                     onInvalid={(e) => {
                       e.preventDefault()
-                      const el = e.target as HTMLInputElement
-                      const msg = el.validity.valueMissing
-                        ? localization.auth.fieldRequired
-                        : localization.auth.invalidEmail
 
                       setFieldErrors((prev) => ({
                         ...prev,
-                        email: msg
+                        email: localization.auth.fieldRequired
                       }))
                     }}
                     aria-invalid={!!fieldErrors.email}
@@ -296,11 +335,11 @@ export function SignIn({
                     className="relative overflow-visible"
                     disabled={isPending}
                   >
-                    {signInEmailPending && <Spinner />}
+                    {isSignInPending && <Spinner />}
 
                     {localization.auth.signIn}
 
-                    <LastUsedBadge method="email" floating />
+                    <LastUsedBadge method={["email", "username"]} floating />
                   </Button>
 
                   {plugins.flatMap((plugin) =>

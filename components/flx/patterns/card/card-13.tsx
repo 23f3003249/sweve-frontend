@@ -10,7 +10,7 @@ export function Card13() {
       <div className="relative aspect-square overflow-hidden rounded-xl">
         {/* Image */}
         <Image
-          src=""
+          src="https://images.unsplash.com/photo-1525268771113-32d9e9021a97?q=80&w=880&auto=format&fit=crop"
           alt="Event"
           width={500}
           height={500}

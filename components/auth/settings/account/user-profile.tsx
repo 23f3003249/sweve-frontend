@@ -10,6 +10,7 @@ import {
   useSession,
   useUpdateUser
 } from "@better-auth-ui/react"
+import { useIsHydrated } from "@/components/auth/use-is-hydrated"
 import { type SyntheticEvent, useState } from "react"
 import { toast } from "sonner"
 
@@ -36,6 +37,7 @@ export type UserProfileProps = {
 export function UserProfile({ className }: UserProfileProps) {
   const { additionalFields, authClient, localization } = useAuth()
   const { data: session } = useSession(authClient as UsernameAuthClient)
+  const isHydrated = useIsHydrated()
 
   const { mutate: updateUser, isPending } = useUpdateUser(authClient, {
     onSuccess: () => toast.success(localization.settings.profileUpdatedSuccess)
@@ -88,6 +90,7 @@ export function UserProfile({ className }: UserProfileProps) {
       </h2>
 
       <form onSubmit={handleSubmit}>
+        {isHydrated && 
         <Card className={cn(className)}>
           <CardContent className="flex flex-col gap-6">
             <ChangeAvatar />
@@ -180,7 +183,7 @@ export function UserProfile({ className }: UserProfileProps) {
               {localization.settings.saveChanges}
             </Button>
           </CardFooter>
-        </Card>
+        </Card>}
       </form>
     </div>
   )

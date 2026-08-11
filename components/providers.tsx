@@ -6,13 +6,16 @@ import { AuthProvider } from "@/components/auth/auth-provider"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import type { ReactNode } from "react"
-import { deleteUserPlugin } from "@/lib/auth/delete-user-plugin"
 import { authClient } from "@/lib/auth-client"
 import { getQueryClient } from "@/lib/query-client"
 
-import { themePlugin } from "@/lib/auth/theme-plugin"
 import { useTheme } from "next-themes"
-import { usernamePlugin } from "@better-auth-ui/core/plugins"
+
+import { deleteUserPlugin } from "@/lib/auth/delete-user-plugin"
+import { themePlugin } from "@/lib/auth/theme-plugin"
+import { twoFactorPlugin } from "@/lib/auth/two-factor-plugin"
+import { usernamePlugin } from "@/lib/auth/username-plugin"
+import { phoneNumberPlugin } from "@/lib/auth/phone-number-plugin"
 
 export function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
@@ -32,6 +35,8 @@ export function Providers({ children }: { children: ReactNode }) {
             usernamePrefix: "@",
             localization: { usernamePlaceholder: "username" }
           }),
+          phoneNumberPlugin({signIn: false}),
+          twoFactorPlugin(),
           deleteUserPlugin(), 
           themePlugin({ useTheme })
         ]}

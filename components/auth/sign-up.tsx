@@ -49,6 +49,10 @@ export type SignUpProps = {
   onSignUpSuccess?: () => void
 }
 
+function withSignupSuccess(email: string) {
+  localStorage.setItem("beginner", "true")
+}
+
 /**
  * Renders a sign-up form with name, email, and password fields, optional social provider buttons, and submission handling.
  *
@@ -98,6 +102,7 @@ export function SignUp({
         resetFetchOptions()
       },
       onSuccess: (_data, { email }) => {
+        withSignupSuccess(email)
         if (emailAndPassword?.requireEmailVerification) {
           sessionStorage.setItem("better-auth-ui.verify-email", email)
           navigate({

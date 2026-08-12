@@ -35,7 +35,10 @@ export function Providers({ children }: { children: ReactNode }) {
             usernamePrefix: "@",
             localization: { usernamePlaceholder: "username" }
           }),
-          phoneNumberPlugin({signIn: false}),
+          phoneNumberPlugin({
+            signIn: false,
+            localization: { phoneNumberPlaceholder: "+91 1234567890" }
+          }),
           twoFactorPlugin(),
           deleteUserPlugin(), 
           themePlugin({ useTheme })

@@ -242,7 +242,7 @@ function Item({
             variant={item.special ? "default" : (active ? "secondary" : "ghost")}
             asChild
             className={cn(
-                "shrink-0 rounded-xl",
+                "shrink-0 rounded-xl transition-all duration-300 ease-out",
                 !item.special && "text-muted-foreground",
                 item.special ? "hover:bg-primary text-zinc-900" : "hover:text-foreground",
                 !item.special && active && "text-foreground",

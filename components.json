@@ -26,6 +26,7 @@
     "@magicui": "https://magicui.design/r/{name}",
     "@shadcn-studio": "https://shadcnstudio.com/r/{style}/{name}.json",
     "@flx": "https://ui.flexnative.com/r/{name}.json",
-    "@reui": "https://reui.io/r/{style}/{name}.json"
+    "@reui": "https://reui.io/r/{style}/{name}.json",
+    "@beui": "https://beui.dev/r/{name}.json"
   }
 }

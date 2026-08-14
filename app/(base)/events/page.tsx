@@ -52,9 +52,9 @@ export default function EventsPage() {
 
     return (
         <div className="min-h-dvh bg-background text-foreground lg:mx-10 md:mx-12 mx-5">
-            <div className="mx-auto w-full h max-w-7xl px-2 pb-4 pt-24 sm:px-8 lg:px-9">
+            <div className="mx-auto w-full max-w-7xl pb-4 pt-24 px-2 sm:px-8 lg:px-9">
                 <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">
+                    <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
                         Events
                     </h1>
                     <p className="text-sm text-muted-foreground">
@@ -80,8 +80,6 @@ export default function EventsPage() {
                             </EventCarouselItem>
                         ))}
                     </EventCarousel>
-                </div>
-                <div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,3 @@
-"use client"
 import {
   Carousel,
   CarouselContent,
@@ -29,7 +28,7 @@ export function EventCarousel({ children, className, title }: EventCarouselProps
   return (
     <div className="w-full">
       {title && (
-        <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+        <h2 className="text-xl md:text-2xl font-semibold mb-4">{title}</h2>
       )}
       <Carousel
         opts={{
@@ -53,7 +52,7 @@ export function EventCarouselItem({
   children: React.ReactNode
 }) {
   return (
-    <CarouselItem className="basis-[80%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+    <CarouselItem className="basis-[90%] sm:basis-1/2 lg:basis-1/4">
       <div className="p-0.5">
         {children}
       </div>

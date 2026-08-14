@@ -140,7 +140,7 @@ export default function HeroCarousel({
           {Array.from({ length: count }).map((_, index) => (
             <button key={index}
               className={cn(
-                "h-3.5 w-3.5 rounded-full border-2", 
+                "h-3.5 w-3.5 rounded-full border-2 transition-border duration-200 ease-in", 
                 current === index + 1 && "border-primary",
               )}
               onClick={() => api?.scrollTo(index)}

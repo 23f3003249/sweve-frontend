@@ -3,10 +3,23 @@
 import * as React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Carousel, type CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, } from "@/components/ui/carousel";
+import { type CarouselApi, 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious, 
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button"
-import { Bookmark, CalendarDays, MapPin, Share2, Ticket } from "lucide-react";
+import { 
+  Bookmark, 
+  CalendarDays, 
+  MapPin, 
+  Share2, 
+  Ticket,
+} from "lucide-react";
 import Link from "next/link";
 
 export type HeroCarouselSlide = {
@@ -29,48 +42,36 @@ type HeroCarouselProps = {
 export default function HeroCarousel({
   slides,
 }: HeroCarouselProps) {
-  const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
+  const [api, setApi] = React.useState<CarouselApi>()
+  const [current, setCurrent] = React.useState(0)
+  const [count, setCount] = React.useState(0)
 
-  // Auto-slide timer
-  const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
-  const resetAutoSlide = React.useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    intervalRef.current = setInterval(() => { api?.scrollNext(); }, 10000);
-  }, [api]);
+  // Auto-slide
+  const plugin = React.useRef(
+    Autoplay({ delay: 10000 })
+  )
 
   React.useEffect(() => {
-    if (!api) return;
-    const len = api.scrollSnapList().length;
-    setCount(len);
-    setCurrent(api.selectedScrollSnap() + 1);
+    if (!api) return
 
-    const onSelect = () => setCurrent(api.selectedScrollSnap() + 1);
-    api.on("select", onSelect);
-    resetAutoSlide();
+    const len = api.scrollSnapList().length
+    setCount(len)
+    setCurrent(api.selectedScrollSnap() + 1)
+
+    const onSelect = () => setCurrent(api.selectedScrollSnap() + 1)
+    api.on("select", onSelect)
 
     return () => {
-      api.off("select", onSelect);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [api, resetAutoSlide]);
-
-  const handleManualNav = React.useCallback(
-    (fn: () => void) => {
-      fn();
-      resetAutoSlide();
-    },
-    [resetAutoSlide]
-  );
+      api.off("select", onSelect)
+    }
+  }, [api])
 
   return (
     <div className="relative h-full w-full">
       <Carousel
         className="h-full w-full *:data-[slot=carousel-content]:h-full"
         setApi={setApi}
+        plugins={[plugin.current]}
         opts={{ loop: true }}
       >
         <CarouselContent className="h-full">
@@ -81,23 +82,24 @@ export default function HeroCarousel({
                 alt={slide.imageAlt ?? ""}
                 fill
                 className="h-full w-full object-cover"
-                sizes="100vw"
                 priority={index === 0}
               />
-              <div className="absolute inset-x-0 bottom-0 z-10 bg-linear-to-t from-black/80 to-transparent p-6 pt-32 text-white sm:pl-24 sm:p-8">
-                <div className="flex max-w-3xl flex-col items-start gap-3">
-                  <Badge variant="default">{slide.eventType}</Badge>
-                  <h3 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-5xl">
+
+              {/* Event Information Overlay */}
+              <div className="absolute inset-x-0 bottom-0 z-10 bg-linear-to-t from-black/80 via-black/60 to-transparent p-10 pt-32 text-white sm:pl-24 sm:p-15">
+                <div className="flex max-w-3xl flex-col items-start mb-10 sm:ml-8 gap-5">
+                  <Badge className="p-3">{slide.eventType}</Badge>
+                  <h3 className="max-w-2xl text-3xl font-bold tracking-tight leading-tight sm:text-5xl">
                     {slide.title}
                   </h3>
-                  <div className="flex flex-wrap items-center gap-2 text-sm text-white/90">
-                    <div className="flex items-center gap-2 rounded-full bg-black/30 px-3 py-1.5 backdrop-blur-sm">
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-white/90">
+                    <div className="flex items-center gap-2 rounded-full bg-black/50 px-3.5 py-2 backdrop-blur-sm">
                       <CalendarDays className="size-3.5 shrink-0" />
-                      <span>{slide.dateTime}</span>
+                      <span className="text-xs md:text-md">{slide.dateTime}</span>
                     </div>
-                    <div className="flex items-center gap-2 rounded-full bg-black/30 px-3 py-1.5 backdrop-blur-sm">
+                    <div className="flex items-center gap-2 rounded-full bg-black/50 px-3.5 py-1.5 backdrop-blur-sm">
                       <MapPin className="size-3.5 shrink-0" />
-                      <span>{slide.location}</span>
+                      <span className="text-xs md:text-md">{slide.location}</span>
                     </div>
                     {slide.price && (
                       <Badge variant="default" className="h-auto px-3 py-1.5 text-sm font-semibold">
@@ -117,10 +119,10 @@ export default function HeroCarousel({
                         REGISTER
                       </Link>
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-11 w-11" aria-label="Save event">
+                    <Button size="icon" className="h-11 w-11 bg-zinc-100 text-zinc-900 hover:bg-zinc-900 hover:text-zinc-100" aria-label="Save event">
                       <Bookmark className="size-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-11 w-11" aria-label="Share event">
+                    <Button size="icon" className="h-11 w-11 bg-zinc-100 text-zinc-900 hover:bg-zinc-900 hover:text-zinc-100" aria-label="Share event">
                       <Share2 className="size-4" />
                     </Button>
                   </div>
@@ -129,31 +131,24 @@ export default function HeroCarousel({
             </CarouselItem>
           ))}
         </CarouselContent>
+
+        {/* Carousel Controls */}
         <div className="absolute -bottom-10 left-1/2 flex -translate-x-1/2 items-center gap-2">
-          <CarouselPrevious
-            className="static! inset-auto! m-0! translate-x-0! translate-y-0!"
-            onClick={() => handleManualNav(() => api?.scrollPrev())} />
+
+          <CarouselPrevious className="static! inset-auto! m-0! translate-x-0! translate-y-0!" />
 
           {Array.from({ length: count }).map((_, index) => (
             <button key={index}
               className={cn(
-                "h-3.5 w-3.5 rounded-full border-2",
-                {
-                  "border-primary": current === index + 1,
-                }
+                "h-3.5 w-3.5 rounded-full border-2", 
+                current === index + 1 && "border-primary",
               )}
-              onClick={() => handleManualNav(() => api?.scrollTo(index))
-              }
+              onClick={() => api?.scrollTo(index)}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
 
-          <CarouselNext
-            className="static! inset-auto! m-0! translate-x-0! translate-y-0!"
-            onClick={() =>
-              handleManualNav(() => api?.scrollNext())
-            }
-          />
+          <CarouselNext className="static! inset-auto! m-0! translate-x-0! translate-y-0!" />
 
         </div>
       </Carousel>

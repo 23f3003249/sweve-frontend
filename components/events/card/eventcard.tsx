@@ -61,7 +61,7 @@ export function EventCard({
           {/* Event information */}
           <div className="space-y-0.5" >
             <h3 className="text-lg font-bold">{title}</h3>
-            <div className="flex flex-col items-start gap-1 text-sm text-white/80">
+            <div className="flex flex-col items-start gap-1 text-sm text-zinc-300">
               <div className="flex items-center gap-1">
                 <CalendarDays className="size-4 shrink-0 text-primary" />
                 <span>{date}</span>
@@ -83,7 +83,7 @@ export function EventCard({
               {price && (<Badge className="w-fit text-lg bg-transparent text-white">{price}</Badge>)}
             </div>
             <h3 className="mt-2 text-lg font-bold">{title}</h3>
-            <div className="flex flex-col items-start gap-1 mt-1 text-sm text-white/80">
+            <div className="flex flex-col items-start gap-1 mt-1 text-sm text-zinc-300">
               <div className="flex items-center gap-1">
                 <CalendarDays className="size-4 shrink-0 text-primary" />
                 <span>{date}</span>

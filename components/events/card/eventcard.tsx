@@ -34,13 +34,13 @@ export function EventCard({ id, title, imageSrc, imageAlt, category, date, locat
         />
 
         {/* Top dark gradient */}
-        <div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-black/70 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-black/50 to-transparent" />
 
         {/* Bottom dark gradient */}
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
 
         {/* Hover overlay */}
-        <div className="absolute inset-0 bg-black/0 backdrop-blur-0 transition-all duration-500 group-hover/card:bg-black/50 group-hover/card:backdrop-blur-sm ease-in-out" />
+        <div className="absolute inset-0 bg-black/0 backdrop-blur-0 transition-all duration-500 group-hover/card:bg-black/10 group-hover/card:backdrop-blur-sm ease-in-out" />
 
         {/* Default content */}
         <div className="absolute inset-0 flex flex-col justify-between p-5 text-white opacity-0 transition-all duration-300 sm:opacity-100 sm:group-hover/card:opacity-0">
@@ -58,7 +58,7 @@ export function EventCard({ id, title, imageSrc, imageAlt, category, date, locat
         </div>
 
         {/* Hover content */}
-        <div className="absolute inset-x-0 bottom-0 flex translate-y-0 flex-col gap-4 p-5 text-white opacity-100 ease-out transition-all duration-500 sm:translate-y-4 sm:opacity-0 sm:group-hover/card:translate-y-0 sm:group-hover/card:opacity-100">
+        <div className="absolute inset-x-0 bottom-0 flex translate-y-0 flex-col gap-4 p-5 text-white opacity-90 ease-out transition-all duration-500 sm:translate-y-4 sm:opacity-0 sm:group-hover/card:translate-y-0 sm:group-hover/card:opacity-100">
           {/* Event information */}
           <div>
             <div className="flex items-center justify-between gap-2">
@@ -66,7 +66,7 @@ export function EventCard({ id, title, imageSrc, imageAlt, category, date, locat
               {price && (<Badge variant="ghost" className="w-fit text-lg ">{price}</Badge>)}
             </div>
             <h3 className="mt-2 text-lg font-bold">{title}</h3>
-            <div className="mt-0.5 flex flex-col items-start gap-0.5 text-sm text-white/80">
+            <div className="mt-0.5 flex flex-col items-start gap-0.5 text-sm text-white/70">
               <div className="flex items-center gap-1">
                 <CalendarDays className="size-3.5 shrink-0" />
                 <span>{date}</span>
@@ -80,8 +80,8 @@ export function EventCard({ id, title, imageSrc, imageAlt, category, date, locat
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            <Button variant="default" className="h-11 flex-1">
-              <Link href={registerUrl} className="flex flex-row gap-1"><Ticket className="size-4.5" />REGISTER</Link>
+            <Button variant="default" className="h-11 flex-1 ">
+              <Link href={registerUrl} className="flex flex-row gap-1 font-semibold"><Ticket className="size-4.5" />REGISTER</Link>
             </Button>
 
             {hasSaveAction && (<Button variant="ghost" size="icon" className="h-11 w-11" aria-label="Save event">

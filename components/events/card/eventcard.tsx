@@ -75,7 +75,7 @@ export function EventCard({
         </div>
 
         {/* Hover content */}
-        <div className="absolute inset-x-0 bottom-0 flex translate-y-0 flex-col gap-4 p-5 text-white opacity-0 ease-out transition-all duration-500 sm:translate-y-4 sm:group-hover/card:translate-y-0 sm:group-hover/card:opacity-100">
+        <div className="absolute hidden inset-x-0 bottom-0 sm:flex translate-y-0 flex-col gap-4 p-5 text-white opacity-0 ease-out transition-all duration-500 sm:translate-y-4 sm:group-hover/card:translate-y-0 sm:group-hover/card:opacity-100">
           {/* Event information */}
           <div>
             <div className="flex items-center justify-between gap-2">
@@ -97,7 +97,7 @@ export function EventCard({
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            <Button variant="default" className="h-11 flex-1 ">
+            <Button asChild variant="default" className="h-11 flex-1">
               <Link href={registerUrl} className="flex flex-row gap-1 font-semibold">
                 <Ticket className="size-4.5" /> REGISTER
               </Link>

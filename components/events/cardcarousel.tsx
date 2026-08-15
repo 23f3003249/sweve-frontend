@@ -39,7 +39,7 @@ export function EventCarousel({ children, className, title }: EventCarouselProps
         <CarouselContent>
           {children}
         </CarouselContent>
-        <CarouselPrevious className="hidden sm:inline-flex" />
+        {/* <CarouselPrevious className="hidden sm:inline-flex" /> */}
         <CarouselNext className="hidden sm:inline-flex" />
       </Carousel>
     </div>
@@ -52,7 +52,7 @@ export function EventCarouselItem({
   children: React.ReactNode
 }) {
   return (
-    <CarouselItem className="basis-[90%] sm:basis-1/2 lg:basis-1/4">
+    <CarouselItem className="pl-3 md:pl-4 basis-[90%] sm:basis-1/2 lg:basis-1/4">
       <div className="p-0.5">
         {children}
       </div>

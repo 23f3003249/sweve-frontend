@@ -51,7 +51,7 @@ const events: EventCardData[] = [
 export default function EventsPage() {
 
     return (
-        <div className="min-h-dvh bg-background text-foreground lg:mx-10 md:mx-12 mx-5">
+        <div className="min-h-dvh bg-background text-foreground md:mx-15 mx-5">
             <div className="mx-auto w-full max-w-[100rem] pb-4 pt-24 px-2 sm:px-8 lg:px-9">
                 <div className="space-y-1">
                     <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">

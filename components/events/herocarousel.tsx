@@ -12,6 +12,36 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 
+// Confetti animation for bookmark
+const CONFETTI_COLORS = [
+  "bg-red-500",
+  "bg-orange-400",
+  "bg-yellow-400",
+  "bg-rose-500",
+  "bg-purple-500",
+  "bg-blue-400",
+  "bg-amber-400",
+  "bg-fuchsia-500",
+];
+
+const BOOKMARK_CONFETTI = Array.from({ length: 12 }, (_, i) => {
+  const angle = -160 + (i / 11) * 140;
+  const rad = (angle * Math.PI) / 180;
+  const dist = 35 + (i % 3) * 12;
+
+  return {
+    id: i,
+    x: Math.cos(rad) * dist,
+    y: Math.sin(rad) * dist,
+    rotate: (i % 2 === 0 ? 1 : -1) * (100 + i * 18),
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    w: i % 2 === 0 ? 6 : 5,
+    h: i % 3 === 0 ? 5 : 3,
+    dur: 0.55 + (i % 4) * 0.07,
+  };
+});
+
+
 export type HeroCarouselSlide = {
   id: string;
   imageSrc: string;
@@ -58,7 +88,6 @@ export default function HeroCarousel({
         if (error instanceof DOMException && error.name === "AbortError") {
           return;
         }
-        console.error("Native share failed:", error);
         toast.error("Could not share event");
       }
     }
@@ -69,7 +98,6 @@ export default function HeroCarousel({
       setTimeout(() => setCopied(false), 2000);
       toast.success("Event link copied");
     } catch (error) {
-      console.error("Failed to copy:", error);
       toast.error("Could not copy event link");
     }
   };
@@ -100,35 +128,6 @@ export default function HeroCarousel({
       api.off("select", onSelect)
     }
   }, [api])
-
-  // Confetti animation for bookmark
-  const CONFETTI_COLORS = [
-    "bg-red-500",
-    "bg-orange-400",
-    "bg-yellow-400",
-    "bg-rose-500",
-    "bg-purple-500",
-    "bg-blue-400",
-    "bg-amber-400",
-    "bg-fuchsia-500",
-  ];
-
-  const BOOKMARK_CONFETTI = Array.from({ length: 12 }, (_, i) => {
-    const angle = -160 + (i / 11) * 140;
-    const rad = (angle * Math.PI) / 180;
-    const dist = 35 + (i % 3) * 12;
-
-    return {
-      id: i,
-      x: Math.cos(rad) * dist,
-      y: Math.sin(rad) * dist,
-      rotate: (i % 2 === 0 ? 1 : -1) * (100 + i * 18),
-      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-      w: i % 2 === 0 ? 6 : 5,
-      h: i % 3 === 0 ? 5 : 3,
-      dur: 0.55 + (i % 4) * 0.07,
-    };
-  });
 
 
   // Function to handle bookmarking the event

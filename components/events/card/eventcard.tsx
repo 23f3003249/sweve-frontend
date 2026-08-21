@@ -92,7 +92,6 @@ export function EventCard({
         if (error instanceof DOMException && error.name === "AbortError") {
           return;
         }
-        console.error("Native share failed:", error);
         toast.error("Could not share event")
       }
     }
@@ -107,7 +106,6 @@ export function EventCard({
       setTimeout(() => setCopied(false), 2000);
       toast.success("Event link copied")
     } catch (error) {
-      console.error("Failed to copy event URL:", error);
       toast.error("Could not copy event link")
     }
   };

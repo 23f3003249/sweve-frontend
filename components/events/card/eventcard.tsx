@@ -1,4 +1,6 @@
-import { Bookmark, CalendarDays, Eye, MapPin, Ticket, } from "lucide-react"
+"use client"
+
+import { Bookmark, CalendarDays, Share2, MapPin, Ticket, } from "lucide-react"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -6,12 +8,51 @@ import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import type { EventCardData } from "@/components/events/cardcarousel"
+import { useState } from "react"
+import { motion, AnimatePresence } from "motion/react"
+import { toast } from "sonner"
+
+// Confetti animation for bookmark action
+const CONFETTI_COLORS = [
+  "bg-red-500",
+  "bg-orange-400",
+  "bg-yellow-400",
+  "bg-rose-500",
+  "bg-purple-500",
+  "bg-blue-400",
+  "bg-amber-400",
+  "bg-fuchsia-500",
+];
+
+const BOOKMARK_CONFETTI = Array.from({ length: 12 }, (_, i) => {
+  const angle = -160 + (i / 11) * 140;
+  const rad = (angle * Math.PI) / 180;
+  const dist = 35 + (i % 3) * 12;
+
+  return {
+    id: i,
+    x: Math.cos(rad) * dist,
+    y: Math.sin(rad) * dist,
+    rotate: (i % 2 === 0 ? 1 : -1) * (100 + i * 18),
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    w: i % 2 === 0 ? 6 : 5,
+    h: i % 3 === 0 ? 5 : 3,
+    dur: 0.55 + (i % 4) * 0.07,
+  };
+});
+
 
 export type EventCardActionType = "save" | "preview"
 
 export type EventCardProps = EventCardData & {
   actions?: EventCardActionType[],
   className?: string,
+}
+
+export type ShareData = {
+  title: string,
+  text: string,
+  url: string,
 }
 
 export function EventCard({
@@ -25,10 +66,65 @@ export function EventCard({
   location,
   price,
   actions = [],
-  registerUrl
+  registerUrl,
 }: EventCardProps) {
-  const hasSaveAction = actions.includes("save")
-  const hasPreviewAction = actions.includes("preview")
+  const hasSaveAction = actions.includes("save");
+  const [copied, setCopied] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [bookmarkClickKey, setBookmarkClickKey] = useState(0);
+
+  // Prepare share data for the event
+  const shareData: ShareData = {
+    title,
+    text: `Check out this event: ${title} on ${date} at ${location}.`,
+    url: registerUrl,
+  };
+  // Function to handle sharing the event
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        if (!navigator.canShare || navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+          toast.success("Event shared successfully")
+          return;
+        }
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+        console.error("Native share failed:", error);
+        toast.error("Could not share event")
+      }
+    }
+
+    // Fallback to clipboard
+    try {
+      if (!navigator.clipboard) {
+        throw new Error("Clipboard API not supported");
+      }
+      await navigator.clipboard.writeText(registerUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast.success("Event link copied")
+    } catch (error) {
+      console.error("Failed to copy event URL:", error);
+      toast.error("Could not copy event link")
+    }
+  };
+
+  // Function to handle bookmarking the event
+  const handleBookmark = () => {
+    const next = !isSaved;
+    setIsSaved(next);
+    // Only trigger confetti when saving
+    if (next) {
+      setBookmarkClickKey((key) => key + 1);
+      toast.success("Saved to bookmarks")
+      return;
+    }
+    toast.info("Removed from bookmarks")
+  };
+
 
   return (
     <Card data-event-id={id} className={cn("group/card relative w-full p-0 rounded-xl", className)}>
@@ -98,21 +194,83 @@ export function EventCard({
           {/* Actions */}
           <div className="flex items-center gap-2">
             <Button asChild variant="default" className="h-11 flex-1">
-              <Link href={registerUrl} className="flex flex-row gap-1 font-semibold">
-                <Ticket className="size-4.5" /> REGISTER
+              <Link href={registerUrl} className="flex flex-row gap-1 font-semibold" >
+                <Ticket className="size-4.5" />
+                REGISTER
               </Link>
             </Button>
 
-            {hasSaveAction && (
-              <Button size="icon" className="h-11 w-11 bg-secondary text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary" aria-label="Save event">
-                <Bookmark className="size-4" />
-              </Button>
-            )}
+            <Button size="icon" className="h-11 w-11 bg-secondary text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary" aria-label="Share event" onClick={handleShare}>
+              <Share2 className="size-4" />
+            </Button>
 
-            {hasPreviewAction && (
-              <Button size="icon" className="h-11 w-11 bg-secondary text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary" aria-label="Preview event">
-                <Eye className="size-4" />
-              </Button>
+            {hasSaveAction && (
+              <div className="relative">
+                {/* Confetti */}
+                <AnimatePresence>
+                  {isSaved &&
+                    BOOKMARK_CONFETTI.map((p) => (
+                      <motion.span
+                        key={`${p.id}-${bookmarkClickKey}`}
+                        className={cn(
+                          "absolute rounded-sm pointer-events-none z-20",
+                          p.color
+                        )}
+                        style={{
+                          width: p.w,
+                          height: p.h,
+                          left: "50%",
+                          top: "50%",
+                          marginLeft: -(p.w / 2),
+                          marginTop: -(p.h / 2),
+                        }}
+                        initial={{
+                          x: 0,
+                          y: 0,
+                          rotate: 0,
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        animate={{
+                          x: p.x,
+                          y: [0, p.y * 0.6, p.y],
+                          rotate: p.rotate,
+                          opacity: [1, 1, 0],
+                          scale: 0.7,
+                        }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          duration: p.dur,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                      />
+                    ))}
+                </AnimatePresence>
+
+                <motion.div
+                  animate={
+                    isSaved
+                      ? { scale: [1, 1.4, 0.85, 1.1, 1] }
+                      : { scale: [1, 0.85, 1] }
+                  }
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <Button
+                    size="icon"
+                    className="h-11 w-11 bg-secondary text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary"
+                    aria-label={isSaved ? "Remove saved event" : "Save event"}
+                    aria-pressed={isSaved}
+                    onClick={handleBookmark}
+                  >
+                    <Bookmark
+                      className={cn(
+                        "size-4 transition-colors duration-300",
+                        isSaved && "fill-current"
+                      )}
+                    />
+                  </Button>
+                </motion.div>
+              </div>
             )}
           </div>
         </div>

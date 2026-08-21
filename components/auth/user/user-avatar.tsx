@@ -1,10 +1,7 @@
 "use client"
 
-import {
-  type UsernameAuthClient,
-  useAuth,
-  useSession
-} from "@better-auth-ui/react"
+import type { UsernameAuthClient } from "@better-auth-ui/core/plugins/username"
+import { useAuth, useSession } from "@better-auth-ui/react"
 import { useIsHydrated } from "@/components/auth/use-is-hydrated"
 import type { User } from "better-auth"
 import { User2 } from "lucide-react"
@@ -39,12 +36,10 @@ export function UserAvatar({
   isPending,
   fallback
 }: UserAvatarProps) {
-  const { authClient } = useAuth()
-  const { data: session, isPending: sessionPending } = useSession(
-    authClient as UsernameAuthClient,
-    { enabled: !user && !isPending }
-  )
-
+  const { authClient } = useAuth<UsernameAuthClient>()
+  const { data: session, isPending: sessionPending } = useSession(authClient, {
+    enabled: !user && !isPending
+  })
   const isHydrated = useIsHydrated()
 
   if ((isPending || sessionPending) && !user) {

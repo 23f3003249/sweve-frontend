@@ -1,4 +1,4 @@
-import HeroCarousel, { type HeroCarouselSlide, } from "@/components/events/herocarousel";
+import HeroCarousel, { type HeroCarouselSlide, } from "@/components/base/herocarousel";
 
 export default function Home() {
   const heroSlides: HeroCarouselSlide[] = [

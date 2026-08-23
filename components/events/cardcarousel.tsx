@@ -3,7 +3,6 @@ import {
   CarouselContent,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel"
 
 export type EventCardData = {

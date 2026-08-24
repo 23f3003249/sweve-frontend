@@ -1,3 +1,7 @@
+"use client"
+
+import * as React from "react"
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import {
   Carousel,
   CarouselContent,
@@ -24,6 +28,9 @@ type EventCarouselProps = {
 }
 
 export function EventCarousel({ children, className, title }: EventCarouselProps) {
+  const plugin = React.useRef(
+    WheelGesturesPlugin({})
+  )
   return (
     <div className="w-full">
       {title && (
@@ -33,6 +40,7 @@ export function EventCarousel({ children, className, title }: EventCarouselProps
         opts={{
           align: "start",
         }}
+        plugins={[plugin.current]}
         className={className}
       >
         <CarouselContent>
@@ -51,7 +59,7 @@ export function EventCarouselItem({
   children: React.ReactNode
 }) {
   return (
-    <CarouselItem className="pl-3 md:pl-4 basis-[90%] sm:basis-1/2 lg:basis-1/4">
+    <CarouselItem className="pl-3 md:pl-4 basis-[90%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
       <div className="p-0.5">
         {children}
       </div>

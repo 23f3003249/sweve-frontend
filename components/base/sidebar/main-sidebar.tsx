@@ -87,7 +87,7 @@ export function MainSidebar({ navItems }: { navItems: NavigationItem[] }) {
             return navItems.slice(startIndex, startIndex + MOBILE_PAGE_SIZE)
         }
     )
-    : [navItems]
+        : [navItems]
     const currentPage = mobilePage % navigationPages.length
     const mobileVisibleItems = navigationPages[currentPage]
 
@@ -178,7 +178,7 @@ function SidebarItem({
     mobile: boolean
 }) {
     const Icon = item.icon || Info
-    
+
     if (item.localPropAnchor) {
         const [isVisible, setIsVisible] = useState(false)
         const path = usePathname()
@@ -195,11 +195,11 @@ function SidebarItem({
 
 
         return (
-            isVisible && 
+            isVisible &&
             <Item item={item} active={active} mobile={mobile} Icon={Icon} />
         )
     }
-    
+
     if (item.HlocalPropAnchor) {
         const [isVisible, setIsVisible] = useState(true)
         const path = usePathname()
@@ -216,7 +216,7 @@ function SidebarItem({
 
 
         return (
-            isVisible && 
+            isVisible &&
             <Item item={item} active={active} mobile={mobile} Icon={Icon} />
         )
     }
@@ -246,7 +246,7 @@ function Item({
                 !item.special && "text-muted-foreground",
                 item.special ? "hover:bg-primary text-zinc-900" : "hover:text-foreground",
                 !item.special && active && "text-foreground",
-    
+
                 mobile
                     ? "h-11 w-11 justify-center p-0"
                     : "h-10 w-full justify-start gap-3 px-3"
@@ -259,7 +259,7 @@ function Item({
                 prefetch={true}
             >
                 <Icon className={cn("shrink-0", mobile ? "size-5" : "size-4")} />
-    
+
                 {!mobile && (
                     <span
                         className={cn(

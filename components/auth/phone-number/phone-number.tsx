@@ -2,15 +2,20 @@
 
 import { authMutationKeys } from "@better-auth-ui/core"
 import {
+  createPhoneNumberValue,
+  type PhoneNumberAuthClient
+} from "@better-auth-ui/core/plugins/phone-number"
+import {
   AuthPrompts,
-  type PhoneNumberAuthClient,
   useAuth,
   useAuthPlugin,
-  useFetchOptions,
+  useFetchOptions
+} from "@better-auth-ui/react"
+import {
   useSendPhoneNumberOtp,
   useSignInPhoneNumber,
   useVerifyPhoneNumber
-} from "@better-auth-ui/react"
+} from "@better-auth-ui/react/plugins/phone-number"
 import { useIsMutating } from "@tanstack/react-query"
 import { Eye, EyeOff } from "lucide-react"
 import { type SyntheticEvent, useState } from "react"
@@ -32,7 +37,6 @@ import {
   FieldLabel,
   FieldSeparator
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import {
   InputGroup,
   InputGroupAddon,
@@ -46,6 +50,7 @@ import { useSignInContinuation } from "@/lib/auth/use-sign-in-continuation"
 import { cn } from "@/lib/utils"
 import { OtpField } from "../otp-field"
 import { ProviderButtons, type SocialLayout } from "../provider-buttons"
+import { InternationalPhoneField } from "./international-phone-field"
 
 type PhoneNumberMode = "code" | "password"
 
@@ -72,6 +77,10 @@ export function PhoneNumber({
     Link
   } = useAuth()
   const {
+    adapter,
+    countries,
+    defaultCountry,
+    locale,
     localization: phoneLocalization,
     otpLength,
     passwordReset,
@@ -86,7 +95,9 @@ export function PhoneNumber({
   const [mode, setMode] = useState<PhoneNumberMode>(
     signIn ? "code" : "password"
   )
-  const [phoneNumber, setPhoneNumber] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState(() =>
+    createPhoneNumberValue("", defaultCountry, adapter)
+  )
   const [password, setPassword] = useState("")
   const [code, setCode] = useState("")
   const [codeSent, setCodeSent] = useState(false)
@@ -148,12 +159,26 @@ export function PhoneNumber({
     (plugin) => plugin.captchaComponent
   )?.captchaComponent
 
-  const sendCode = () =>
-    sendOtp({ phoneNumber, fetchOptions } as Parameters<typeof sendOtp>[0])
+  const getPhoneNumber = () => {
+    if (phoneNumber.e164) return phoneNumber.e164
+    setFieldErrors((current) => ({
+      ...current,
+      phoneNumber: phoneLocalization.invalidPhoneNumber
+    }))
+  }
+  const sendCode = () => {
+    const normalizedPhoneNumber = getPhoneNumber()
+    if (!normalizedPhoneNumber) return
+    sendOtp({
+      phoneNumber: normalizedPhoneNumber,
+      fetchOptions
+    } as Parameters<typeof sendOtp>[0])
+  }
   const verifyCode = (completedCode: string) => {
     if (isPending || completedCode.length !== otpLength) return
 
-    verify({ phoneNumber, code: completedCode })
+    if (!phoneNumber.e164) return
+    verify({ phoneNumber: phoneNumber.e164, code: completedCode })
   }
   const switchMode = () => {
     setMode((current) => (current === "code" ? "password" : "code"))
@@ -166,9 +191,11 @@ export function PhoneNumber({
     event.preventDefault()
 
     if (mode === "password") {
+      const normalizedPhoneNumber = getPhoneNumber()
+      if (!normalizedPhoneNumber) return
       const formData = new FormData(event.currentTarget)
       signInWithPassword({
-        phoneNumber,
+        phoneNumber: normalizedPhoneNumber,
         password,
         ...(emailAndPassword?.rememberMe
           ? { rememberMe: formData.get("rememberMe") === "on" }
@@ -198,7 +225,7 @@ export function PhoneNumber({
           <CardDescription>
             {phoneLocalization.codeSentTo.replace(
               "{{phoneNumber}}",
-              phoneNumber
+              phoneNumber.display
             )}
           </CardDescription>
         )}
@@ -232,38 +259,24 @@ export function PhoneNumber({
                 />
               ) : (
                 <>
-                  <Field data-invalid={Boolean(fieldErrors.phoneNumber)}>
-                    <FieldLabel htmlFor="phoneNumber">
-                      {phoneLocalization.phoneNumber}
-                    </FieldLabel>
-                    <Input
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      type="tel"
-                      autoComplete="tel"
-                      inputMode="tel"
-                      value={phoneNumber}
-                      placeholder={phoneLocalization.phoneNumberPlaceholder}
-                      required
-                      disabled={isPending}
-                      onChange={(event) => {
-                        setPhoneNumber(event.target.value)
-                        setFieldErrors((current) => ({
-                          ...current,
-                          phoneNumber: undefined
-                        }))
-                      }}
-                      onInvalid={(event) => {
-                        event.preventDefault()
-                        setFieldErrors((current) => ({
-                          ...current,
-                          phoneNumber: event.currentTarget.validationMessage
-                        }))
-                      }}
-                      aria-invalid={Boolean(fieldErrors.phoneNumber)}
-                    />
-                    <FieldError>{fieldErrors.phoneNumber}</FieldError>
-                  </Field>
+                  <InternationalPhoneField
+                    adapter={adapter}
+                    countryCodes={countries}
+                    countryLabel={phoneLocalization.country}
+                    disabled={isPending}
+                    error={fieldErrors.phoneNumber}
+                    locale={locale}
+                    phoneLabel={phoneLocalization.phoneNumber}
+                    placeholder={phoneLocalization.phoneNumberPlaceholder}
+                    value={phoneNumber}
+                    onChange={(value) => {
+                      setPhoneNumber(value)
+                      setFieldErrors((current) => ({
+                        ...current,
+                        phoneNumber: undefined
+                      }))
+                    }}
+                  />
 
                   {mode === "password" && (
                     <Field data-invalid={Boolean(fieldErrors.password)}>

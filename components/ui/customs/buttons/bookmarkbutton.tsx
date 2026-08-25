@@ -130,7 +130,7 @@ export function BookmarkButton({
                     <Bookmark
                         className={cn(
                             "size-4 transition-colors duration-300",
-                            isSaved && "fill-current"
+                            isSaved && "fill-primary text-primary"
                         )}
                     />
                 </Button>

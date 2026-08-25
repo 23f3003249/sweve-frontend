@@ -48,6 +48,7 @@ const events: EventCardData[] = [
     },
 ]
 
+
 export default function EventsPage() {
 
     return (
@@ -75,6 +76,7 @@ export default function EventsPage() {
                                     location={event.location}
                                     price={event.price}
                                     registerUrl={`/events/${event.id}/register`}
+                                    href={`/events/${event.id}`}
                                     actions={['save', 'preview']}
                                 />
                             </EventCarouselItem>

@@ -19,6 +19,7 @@ export type EventCardData = {
   price: string
   category: string
   registerUrl: string
+  isBookmarked?: boolean
 }
 
 type EventCarouselProps = {

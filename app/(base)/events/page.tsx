@@ -63,7 +63,7 @@ export default function EventsPage() {
                     </p>
                 </div>
                 <div className="mt-15">
-                    <EventCarousel title="Upcoming Events">
+                    <EventCarousel title="Upcoming Events" url="/">
                         {events.map((event) => (
                             <EventCarouselItem key={event.id}>
                                 <EventCard

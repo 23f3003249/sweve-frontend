@@ -8,6 +8,9 @@ import {
   CarouselItem,
   CarouselNext,
 } from "@/components/ui/carousel"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { ChevronRight } from "lucide-react"
 
 export type EventCardData = {
   id: string
@@ -26,16 +29,26 @@ type EventCarouselProps = {
   children: React.ReactNode
   className?: string
   title?: string
+  url?: string
 }
 
-export function EventCarousel({ children, className, title }: EventCarouselProps) {
+export function EventCarousel({ children, className, title, url }: EventCarouselProps) {
   const plugin = React.useRef(
     WheelGesturesPlugin({})
   )
   return (
     <div className="w-full">
       {title && (
-        <h2 className="text-xl md:text-2xl font-semibold mb-4">{title}</h2>
+        <div className="w-full justify-between flex">
+          <h2 className="text-xl md:text-2xl font-semibold mb-4">{title}</h2>
+          {url && (
+            <Button asChild variant="ghost">
+              <Link href={url} aria-label="View more" className="text-sm md:text-base font-medium">
+                <ChevronRight/>
+              </Link>
+            </Button>
+          )}
+        </div>
       )}
       <Carousel
         opts={{

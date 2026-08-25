@@ -1,11 +1,9 @@
 "use client"
 
-import {
-  type PhoneNumberAuthClient,
-  useAuth,
-  useAuthPlugin,
-  useResetPhoneNumberPassword
-} from "@better-auth-ui/react"
+import { isPasswordCompromisedError } from "@better-auth-ui/core"
+import type { PhoneNumberAuthClient } from "@better-auth-ui/core/plugins/phone-number"
+import { useAuth, useAuthPlugin } from "@better-auth-ui/react"
+import { useResetPhoneNumberPassword } from "@better-auth-ui/react/plugins/phone-number"
 import { Eye, EyeOff } from "lucide-react"
 import { type SyntheticEvent, useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -35,6 +33,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { phoneNumberPlugin } from "@/lib/auth/phone-number-plugin"
 import { cn } from "@/lib/utils"
 import { OtpField } from "../otp-field"
+import { PasswordStrengthMeter } from "../password-strength-meter"
 import { useIsHydrated } from "../use-is-hydrated"
 import { PHONE_NUMBER_RESET_STORAGE_KEY } from "./forgot-phone-number-password"
 
@@ -77,7 +76,18 @@ export function ResetPhoneNumberPassword({
   const { mutate: resetPassword, isPending } = useResetPhoneNumberPassword(
     authClient as PhoneNumberAuthClient,
     {
-      onError: () => setCode(""),
+      onError: (error) => {
+        // The haveIBeenPwned plugin rejects on the password itself, so it
+        // belongs against the field rather than in a toast.
+        if (isPasswordCompromisedError(error)) {
+          setFieldErrors((prev) => ({
+            ...prev,
+            password: localization.auth.passwordCompromised
+          }))
+        }
+
+        setCode("")
+      },
       onSuccess: () => {
         sessionStorage.removeItem(PHONE_NUMBER_RESET_STORAGE_KEY)
         toast.success(localization.auth.passwordResetSuccess)
@@ -225,6 +235,8 @@ export function ResetPhoneNumberPassword({
                 </InputGroupAddon>
               </InputGroup>
               <FieldError>{fieldErrors.password}</FieldError>
+
+              <PasswordStrengthMeter password={password} />
             </Field>
 
             {emailAndPassword?.confirmPassword && (

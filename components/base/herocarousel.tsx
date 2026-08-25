@@ -45,11 +45,11 @@ export default function HeroCarousel({
   }, [api])
 
   // Auto-slide
-  const plugin = React.useRef(
+  const plugin = React.useMemo(() =>
     Autoplay({
       delay: 10000
     })
-  )
+  , [])
 
   React.useEffect(() => {
     if (!api) return
@@ -72,7 +72,7 @@ export default function HeroCarousel({
       <Carousel
         className="h-full w-full *:data-[slot=carousel-content]:h-full"
         setApi={setApi}
-        plugins={[plugin.current]}
+        plugins={[plugin]}
         opts={{ loop: true }}
       >
         <CarouselContent className="h-full">
@@ -123,7 +123,7 @@ export default function HeroCarousel({
                     {/* Bookmark */}
                     <BookmarkButton
                       isSaved={slide.isSaved}
-                      onChange={(saved) => onBookmarkToggle?.(slide.id, saved)}
+                      onChangeAction={(saved) => onBookmarkToggle?.(slide.id, saved)}
                     />
 
                     {/* Share */}

@@ -33,9 +33,9 @@ type EventCarouselProps = {
 }
 
 export function EventCarousel({ children, className, title, url }: EventCarouselProps) {
-  const plugin = React.useRef(
+  const plugin = React.useMemo(() =>
     WheelGesturesPlugin({})
-  )
+  , [])
   return (
     <div className="w-full">
       {title && (
@@ -54,7 +54,7 @@ export function EventCarousel({ children, className, title, url }: EventCarousel
         opts={{
           align: "start",
         }}
-        plugins={[plugin.current]}
+        plugins={[plugin]}
         className={className}
       >
         <CarouselContent>

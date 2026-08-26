@@ -123,7 +123,7 @@ export function KeywordCombobox({
                     )}
                 </ComboboxValue>
 
-                <SearchIcon className="size-4 text-muted-foreground pointer-events-none" />
+                <SearchIcon className="size-4 text-muted-foreground pointer-events-none text-primary" />
             </ComboboxChips>
 
             <ComboboxContent>

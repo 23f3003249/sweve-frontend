@@ -8,8 +8,8 @@ import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import type { EventCardData } from "@/components/events/cardcarousel"
-import { BookmarkButton } from "@/components/ui/customs/buttons/bookmarkbutton"
-import { ShareButton, type ShareData } from "@/components/ui/customs/buttons/sharebutton"
+import { BookmarkButton } from "@/components/ui/custom/button/bookmarkbutton"
+import { ShareButton, type ShareData } from "@/components/ui/custom/button/sharebutton"
 
 export type EventCardActionType = "save" | "preview"
 

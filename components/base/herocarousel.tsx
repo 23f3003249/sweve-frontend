@@ -9,8 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button"
 import { CalendarDays, MapPin, Ticket, } from "lucide-react";
 import Link from "next/link";
-import { BookmarkButton } from "../ui/customs/buttons/bookmarkbutton";
-import { ShareButton } from "../ui/customs/buttons/sharebutton";
+import { BookmarkButton } from "../ui/custom/button/bookmarkbutton";
+import { ShareButton } from "../ui/custom/button/sharebutton";
 
 export type HeroCarouselSlide = {
   id: string;
@@ -49,7 +49,7 @@ export default function HeroCarousel({
     Autoplay({
       delay: 10000
     })
-  , [])
+    , [])
 
   React.useEffect(() => {
     if (!api) return

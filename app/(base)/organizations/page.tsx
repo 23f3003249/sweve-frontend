@@ -4,6 +4,7 @@ import {
     type OrganizationCardData,
 } from "@/components/organizations/organizationcarousel"
 import { OrganizationCard } from "@/components/organizations/card/organizationcard"
+import { KeywordCombobox } from "@/components/ui/custom/keyword-combobox"
 
 const organizations: OrganizationCardData[] = [
     {
@@ -37,7 +38,7 @@ const organizations: OrganizationCardData[] = [
 export default function OrganizationsPage() {
     return (
         <div className="min-h-dvh bg-background text-foreground md:mx-15 mx-5">
-            <div className="mx-auto w-full max-w-[100rem] pb-4 pt-24 px-2 sm:px-8 lg:px-9">
+            <div className="mx-auto w-full max-w-[100rem] space-y-8 px-2 pt-24 pb-4 sm:px-8 lg:px-9">
                 <div className="space-y-1">
                     <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
                         Organizations
@@ -47,8 +48,12 @@ export default function OrganizationsPage() {
                         Discover communities and organizations.
                     </p>
                 </div>
+                <div className="space-y-6">
+                    <KeywordCombobox
+                        options={[]}
+                        className="w-full max-w-sm"
+                    />
 
-                <div className="mt-15">
                     <OrganizationCarousel title="New Organizations">
                         {organizations.map((organization) => (
                             <OrganizationCarouselItem key={organization.id}>

@@ -1,5 +1,22 @@
+"use client";
+
+import * as React from "react";
 import { EventCarousel, EventCarouselItem, type EventCardData } from "@/components/events/cardcarousel";
 import { EventCard } from "@/components/events/card/eventcard";
+import { KeywordCombobox, type KeywordOption } from "@/components/ui/custom/keyword-combobox";
+
+const keywordOptions: KeywordOption[] = [
+    { value: "design", label: "Design" },
+    { value: "technology", label: "Technology" },
+    { value: "business", label: "Business" },
+    { value: "web-dev", label: "Web Dev" },
+];
+
+async function loadKeywordOptions(query: string) {
+    return keywordOptions.filter((option) =>
+        option.label.toLowerCase().includes(query.toLowerCase())
+    );
+}
 
 const events: EventCardData[] = [
     {
@@ -50,6 +67,7 @@ const events: EventCardData[] = [
 
 
 export default function EventsPage() {
+    const [selectedKeywords, setSelectedKeywords] = React.useState<string[]>([])
 
     return (
         <div className="min-h-dvh bg-background text-foreground md:mx-15 mx-5">
@@ -62,7 +80,15 @@ export default function EventsPage() {
                         Discover upcoming events.
                     </p>
                 </div>
-                <div className="mt-15">
+                <div className="space-y-6 mt-8">
+                    <KeywordCombobox
+                        loadOptionsAction={loadKeywordOptions}
+                        value={selectedKeywords}
+                        onValueChangeAction={setSelectedKeywords}
+                        placeholder="Search event keywords"
+                        className="w-full max-w-sm"
+                    />
+
                     <EventCarousel title="Upcoming Events" url="/">
                         {events.map((event) => (
                             <EventCarouselItem key={event.id}>

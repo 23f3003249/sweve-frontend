@@ -1,3 +1,7 @@
+"use client"
+
+import * as React from "react"
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import {
   Carousel,
   CarouselContent,
@@ -40,6 +44,7 @@ export function OrganizationCarousel({
         opts={{
           align: "start",
         }}
+        plugins={[WheelGesturesPlugin({})]}
         className={className}
       >
         <CarouselContent>

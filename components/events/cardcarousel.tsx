@@ -35,7 +35,7 @@ type EventCarouselProps = {
 export function EventCarousel({ children, className, title, url }: EventCarouselProps) {
   const plugin = React.useMemo(() =>
     WheelGesturesPlugin({})
-  , [])
+    , [])
   return (
     <div className="w-full">
       {title && (
@@ -44,7 +44,7 @@ export function EventCarousel({ children, className, title, url }: EventCarousel
           {url && (
             <Button asChild variant="ghost">
               <Link href={url} aria-label="View more" className="text-sm md:text-base font-medium">
-                <ChevronRight/>
+                <ChevronRight />
               </Link>
             </Button>
           )}
@@ -60,7 +60,6 @@ export function EventCarousel({ children, className, title, url }: EventCarousel
         <CarouselContent>
           {children}
         </CarouselContent>
-        {/* <CarouselPrevious className="hidden sm:inline-flex" /> */}
         <CarouselNext className="hidden sm:inline-flex" />
       </Carousel>
     </div>

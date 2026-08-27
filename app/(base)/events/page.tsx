@@ -1,6 +1,6 @@
 import { EventCarousel, EventCarouselItem, type EventCardData } from "@/components/events/cardcarousel";
 import { EventCard } from "@/components/events/card/eventcard";
-import { KeywordCombobox } from "@/components/ui/custom/keyword-combobox";
+import { KeywordCombobox, type KeywordItemType } from "@/components/ui/custom/keyword-combobox";
 
 
 const events: EventCardData[] = [
@@ -50,8 +50,48 @@ const events: EventCardData[] = [
     },
 ]
 
+const searchItems: KeywordItemType[] = [
+    { value: "design", label: "Design" },
+    { value: "technology", label: "Technology" },
+    { value: "business", label: "Business" },
+    { value: "web-dev", label: "Web Dev" },
+    { value: "marketing", label: "Marketing" },
+    { value: "finance", label: "Finance" },
+    { value: "healthcare", label: "Healthcare" },
+    { value: "education", label: "Education" },
+    { value: "entertainment", label: "Entertainment" },
+    { value: "sports", label: "Sports" },
+    { value: "travel", label: "Travel" },
+    { value: "food", label: "Food" },
+    { value: "fashion", label: "Fashion" },
+    { value: "art", label: "Art" },
+    { value: "music", label: "Music" },
+    { value: "photography", label: "Photography" },
+    { value: "gaming", label: "Gaming" },
+    { value: "science", label: "Science" },
+    { value: "politics", label: "Politics" },
+    { value: "environment", label: "Environment" },
+];
+
 
 export default function EventsPage() {
+    // const itemSearch = useCallback(async (
+    //   query: string,
+    // ): Promise<KeywordItemType[]> => {
+    //   // Simulate network delay
+    //   await new Promise((resolve) => {
+    //     setTimeout(resolve, Math.random() * 5000 + 100);
+    //   });
+    
+    //   // Simulate occasional network errors (1% chance)
+    //   if (Math.random() < 0.01 || query === 'will_error') {
+    //     return [];
+    //   }
+    
+    //   return searchItems.filter((item) => {
+    //     return item.label.toLowerCase().includes(query.toLowerCase());
+    //   });
+    // }, [])
 
     return (
         <div className="min-h-dvh bg-background text-foreground md:mx-15 mx-5">
@@ -66,8 +106,9 @@ export default function EventsPage() {
                 </div>
                 <div className="space-y-6 mt-15">
                     <KeywordCombobox
+                        items={searchItems}
                         placeholder="Search event keywords"
-                        className="w-full max-w-sm"
+                        className="p-3"
                     />
 
                     <EventCarousel title="Upcoming Events" url="/">

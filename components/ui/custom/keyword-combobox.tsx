@@ -13,93 +13,76 @@ import {
     ComboboxItem,
     ComboboxList,
     ComboboxValue,
+    useComboboxAnchor,
 } from "@/components/ui/combobox"
+import { cn } from "@/lib/utils"
 
-export type KeywordOption = {
+export type KeywordItemType = {
     value: string
     label: string
 }
 
 type KeywordComboboxProps = {
-    options?: KeywordOption[]
-    value?: string[]
-    onValueChangeAction?: (value: string[]) => void
-    loadOptionsAction?: (query: string) => Promise<KeywordOption[]>
+    /**
+     * List of items to display in the combobox. If `loadItemsAction` is provided, this prop will be ignored.
+     */
+    items?: KeywordItemType[]
+    /**
+     * Callback function to handle value changes.
+     * @param value - The new value of the combobox.
+     */
+    onValueChangeAction?: (value: KeywordItemType[]) => void
+    /**
+     * Callback function to handel querying keywords.
+     * @param query - The latest query
+     * @returns `Promise<KeywordItemType[]>` A promise that resolves to an array of `KeywordItemType` objects.
+     */
+    loadItemsAction?: (query: string) => Promise<KeywordItemType[]>
     debounceMs?: number
     placeholder?: string
     disabled?: boolean
     className?: string
 }
 
-/** 
- * @example
- * ```
- * const keywordOptions: KeywordOption[] = [
- *     { value: "design", label: "Design" },
- *     { value: "technology", label: "Technology" },
- *     { value: "business", label: "Business" },
- *     { value: "web-dev", label: "Web Dev" },
- * ];
- *   
- * async function loadKeywordOptions(query: string) {
- *     return keywordOptions.filter((option) =>
- *         option.label.toLowerCase().includes(query.toLowerCase())
- *     );
- * }
- * 
- * const [selectedKeywords, setSelectedKeywords] = React.useState<string[]>([])
- * ```
- * 
- * JSX:
- * ```
- * <KeywordCombobox
-        loadOptionsAction={loadKeywordOptions}
-        value={selectedKeywords}
-        onValueChangeAction={setSelectedKeywords}
-        placeholder="Search event keywords"
-        className="w-full max-w-sm"
-    />
- * ```
- */
+
 export function KeywordCombobox({
-    options = [],
-    value = [],
+    items = [],
     onValueChangeAction,
-    loadOptionsAction,
+    loadItemsAction,
     debounceMs = 300,
     placeholder = "Search event keywords",
     disabled = false,
     className,
 }: KeywordComboboxProps) {
     const [query, setQuery] = React.useState("")
-    const [asyncOptions, setAsyncOptions] = React.useState<KeywordOption[]>([])
+    const [asyncItems, setAsyncItems] = React.useState<KeywordItemType[]>([])
     const [loading, setLoading] = React.useState(false)
 
     React.useEffect(() => {
-        if (!loadOptionsAction) {
+        if (!loadItemsAction) {
             return
         }
 
         const search = query.trim()
 
         if (!search) {
+            setAsyncItems([])
             return
         }
-
+        setLoading(true)
+        
         let cancelled = false
 
         const timer = window.setTimeout(async () => {
-            setLoading(true)
-
             try {
-                const results = await loadOptionsAction(search)
+                const results = await loadItemsAction(search)
 
                 if (!cancelled) {
-                    setAsyncOptions(results)
+                    setAsyncItems(results)
                 }
             } catch {
                 if (!cancelled) {
-                    setAsyncOptions([])
+                    setAsyncItems([])
                 }
             } finally {
                 if (!cancelled) {
@@ -112,22 +95,27 @@ export function KeywordCombobox({
             cancelled = true
             window.clearTimeout(timer)
         }
-    }, [query, debounceMs, loadOptionsAction])
+    }, [query, debounceMs, loadItemsAction])
 
-    const displayedOptions = loadOptionsAction ? asyncOptions : options
+    const displayedItems = loadItemsAction ? asyncItems : items
+    const anchor = useComboboxAnchor()
 
     return (
         <Combobox
             multiple
-            value={value}
+            autoHighlight
+            items={displayedItems}
+            itemToStringLabel={(item: KeywordItemType) => item.label}
+            itemToStringValue={(item: KeywordItemType) => item.value}
             disabled={disabled}
             onValueChange={(nextValue) => {
+                // console.log("KeywordCombobox onValueChange:", nextValue)
                 onValueChangeAction?.(nextValue)
             }}
         >
-            <ComboboxChips className={className}>
+            <ComboboxChips ref={anchor} className={cn("w-full max-w-sm", className)}>
                 <ComboboxValue>
-                    {(selectedValues: KeywordOption[]) => (
+                    {(selectedValues: KeywordItemType[]) => (
                         <>
                             {selectedValues.map((option) => (
                                 <ComboboxChip
@@ -141,7 +129,9 @@ export function KeywordCombobox({
                             <ComboboxChipsInput
                                 value={query}
                                 onChange={(event) => {
-                                    setLoading(false)
+                                    if (!event.target.value) {
+                                        setLoading(false)
+                                    }
                                     setQuery(event.target.value)
                                 }}
                                 placeholder={
@@ -156,7 +146,7 @@ export function KeywordCombobox({
                 <SearchIcon className="size-4 text-muted-foreground pointer-events-none text-primary" />
             </ComboboxChips>
 
-            <ComboboxContent>
+            <ComboboxContent anchor={anchor}>
                 {loading ? (
                     <div className="px-3 py-2 text-sm text-muted-foreground">
                         Searching...
@@ -167,21 +157,27 @@ export function KeywordCombobox({
                             {query ? "No keywords found." : "Start typing to search."}
                         </ComboboxEmpty>
 
-                        {displayedOptions.length > 0 && (
-                            <ComboboxList>
-                                {displayedOptions.map((option) => (
-                                    <ComboboxItem
-                                        key={option.value}
-                                        value={option}
-                                    >
-                                        {option.label}
-                                    </ComboboxItem>
-                                ))}
-                            </ComboboxList>
-                        )}
+                        <ComboboxList>
+                            {(item: KeywordItemType) => (
+                                <KeywordItem
+                                    key={item.value}
+                                    item={item}
+                                />
+                            )}
+                        </ComboboxList>
                     </>
                 )}
             </ComboboxContent>
         </Combobox>
     )
 }
+
+const KeywordItem = React.memo(({ item }: { item: KeywordItemType }) => {
+    return (
+        <ComboboxItem
+            value={item}
+        >
+            {item.label}
+        </ComboboxItem>
+    )
+})

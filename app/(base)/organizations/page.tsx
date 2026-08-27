@@ -51,7 +51,7 @@ export default function OrganizationsPage() {
                 <div className="space-y-6 mt-15">
                     <KeywordCombobox
                         placeholder="Search organization keywords"
-                        className="w-full max-w-sm"
+                        className="p-3"
                     />
 
                     <OrganizationCarousel title="New Organizations">

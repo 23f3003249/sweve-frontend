@@ -35,7 +35,7 @@ type EventCarouselProps = {
 export function EventCarousel({ children, className, title, url }: EventCarouselProps) {
   const plugin = React.useMemo(() =>
     WheelGesturesPlugin({})
-    , [])
+  , [])
   return (
     <div className="w-full">
       {title && (

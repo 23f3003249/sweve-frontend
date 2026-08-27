@@ -32,6 +32,10 @@ export function OrganizationCarousel({
   className,
   title,
 }: OrganizationCarouselProps) {
+  const plugin = React.useMemo(() =>
+    WheelGesturesPlugin({})
+  , [])
+
   return (
     <div className="w-full">
       {title && (
@@ -44,7 +48,7 @@ export function OrganizationCarousel({
         opts={{
           align: "start",
         }}
-        plugins={[WheelGesturesPlugin({})]}
+        plugins={[plugin]}
         className={className}
       >
         <CarouselContent>
@@ -64,7 +68,7 @@ export function OrganizationCarouselItem({
   children: React.ReactNode
 }) {
   return (
-    <CarouselItem className="pl-3 md:pl-4 basis-[90%] sm:basis-1/2 lg:basis-1/4">
+    <CarouselItem className="pl-3 md:pl-4 basis-[90%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
       <div className="p-0.5">
         {children}
       </div>

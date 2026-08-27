@@ -5,7 +5,6 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { type CarouselApi, Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button"
 import { CalendarDays, MapPin, Ticket, } from "lucide-react";
@@ -48,10 +47,9 @@ export default function HeroCarousel({
   // Auto-slide
   const plugin = React.useMemo(() =>
     [
-      Autoplay({ delay: 10000 }),
-      WheelGesturesPlugin({})
+      Autoplay({ delay: 10000 })
     ]
-    , [])
+  , [])
 
   React.useEffect(() => {
     if (!api) return

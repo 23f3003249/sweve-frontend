@@ -48,9 +48,9 @@ export default function OrganizationsPage() {
                         Discover communities and organizations.
                     </p>
                 </div>
-                <div className="space-y-6">
+                <div className="space-y-6 mt-15">
                     <KeywordCombobox
-                        options={[]}
+                        placeholder="Search organization keywords"
                         className="w-full max-w-sm"
                     />
 

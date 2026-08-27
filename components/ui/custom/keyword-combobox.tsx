@@ -31,6 +31,36 @@ type KeywordComboboxProps = {
     className?: string
 }
 
+/** 
+ * @example
+ * ```
+ * const keywordOptions: KeywordOption[] = [
+ *     { value: "design", label: "Design" },
+ *     { value: "technology", label: "Technology" },
+ *     { value: "business", label: "Business" },
+ *     { value: "web-dev", label: "Web Dev" },
+ * ];
+ *   
+ * async function loadKeywordOptions(query: string) {
+ *     return keywordOptions.filter((option) =>
+ *         option.label.toLowerCase().includes(query.toLowerCase())
+ *     );
+ * }
+ * 
+ * const [selectedKeywords, setSelectedKeywords] = React.useState<string[]>([])
+ * ```
+ * 
+ * JSX:
+ * ```
+ * <KeywordCombobox
+        loadOptionsAction={loadKeywordOptions}
+        value={selectedKeywords}
+        onValueChangeAction={setSelectedKeywords}
+        placeholder="Search event keywords"
+        className="w-full max-w-sm"
+    />
+ * ```
+ */
 export function KeywordCombobox({
     options = [],
     value = [],

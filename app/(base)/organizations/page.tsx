@@ -50,8 +50,11 @@ export default function OrganizationsPage() {
                 </div>
                 <div className="space-y-6 mt-15">
                     <KeywordCombobox
-                        placeholder="Search organization keywords"
+                        queryRedirect
+                        placeholder="Search organization or category"
                         className="p-3"
+                        redirecturlTemplate="/organizations/search/?q={query}"
+                        redirectmsgTemplate="Search {query} as organization"
                     />
 
                     <OrganizationCarousel title="New Organizations">

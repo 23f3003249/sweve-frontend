@@ -106,9 +106,12 @@ export default function EventsPage() {
                 </div>
                 <div className="space-y-6 mt-15">
                     <KeywordCombobox
+                        queryRedirect
                         items={searchItems}
-                        placeholder="Search event keywords"
+                        placeholder="Search event or category"
                         className="p-3"
+                        redirecturlTemplate="/events/search/?q={query}"
+                        redirectmsgTemplate="Search {query} as event"
                     />
 
                     <EventCarousel title="Upcoming Events" url="/">

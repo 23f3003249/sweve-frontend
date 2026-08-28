@@ -1,5 +1,7 @@
 import { Navbar } from "@/components/base/navbar/navbar"
 import { MainSidebar, type NavigationItem } from "@/components/base/sidebar/main-sidebar"
+import { MainSidebarSkeleton } from "@/components/base/sidebar/main-sidebar-skeleton"
+import { Suspense } from "react"
 
 const navigationItems: NavigationItem[] = [
     {
@@ -39,7 +41,9 @@ export default function BaseLayout({
     return (
         <div className="min-h-dvh bg-background">
             <Navbar />
-            <MainSidebar navItems={navigationItems} />
+            <Suspense fallback={MainSidebarSkeleton({ navItems: navigationItems })}>
+                <MainSidebar navItems={navigationItems} />
+            </Suspense>
             <main>
                 {children}
             </main>

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { SearchIcon } from "lucide-react"
+import { Search, SearchIcon } from "lucide-react"
 
 import {
     Combobox,
@@ -15,7 +15,10 @@ import {
     ComboboxValue,
     useComboboxAnchor,
 } from "@/components/ui/combobox"
+
 import { cn } from "@/lib/utils"
+import Link from "next/link"
+import { Button } from "../button"
 
 export type KeywordItemType = {
     value: string
@@ -38,6 +41,21 @@ type KeywordComboboxProps = {
      * @returns `Promise<KeywordItemType[]>` A promise that resolves to an array of `KeywordItemType` objects.
      */
     loadItemsAction?: (query: string) => Promise<KeywordItemType[]>
+    /**
+     * If true, a query redirect component will be displayed at the bottom of the combobox, allowing users to search for the query on a separate page.
+     * @default false
+     */
+    queryRedirect?: boolean
+    /**
+     * Optional template for the redirect URL. Use `{query}` as a placeholder for the query.
+     * @default "/search/?q={query}"
+     */
+    redirecturlTemplate?: string
+    /**
+     * Optional template for the redirect message. Use `{query}` as a placeholder for the query.
+     * @default "Search {query}"
+     */
+    redirectmsgTemplate?: string
     debounceMs?: number
     placeholder?: string
     disabled?: boolean
@@ -49,9 +67,12 @@ export function KeywordCombobox({
     items = [],
     onValueChangeAction,
     loadItemsAction,
+    queryRedirect = false,
     debounceMs = 300,
     placeholder = "Search event keywords",
     disabled = false,
+    redirecturlTemplate = "/search/?q={query}",
+    redirectmsgTemplate = "Search {query}",
     className,
 }: KeywordComboboxProps) {
     const [query, setQuery] = React.useState("")
@@ -143,7 +164,7 @@ export function KeywordCombobox({
                     )}
                 </ComboboxValue>
 
-                <SearchIcon className="size-4 text-muted-foreground pointer-events-none text-primary" />
+                <SearchIcon className="size-4 pointer-events-none text-primary" />
             </ComboboxChips>
 
             <ComboboxContent anchor={anchor}>
@@ -166,6 +187,22 @@ export function KeywordCombobox({
                             )}
                         </ComboboxList>
                     </>
+                )}
+                
+                {/* Bottom query redirect to search page */}
+                {queryRedirect && (
+                    <div className="border-t-2 border-border bg-primary dark:bg-background">
+                        <Button
+                            asChild
+                            variant="link"
+                            className="flex px-4 py-3 h-fit items-center justify-start gap-2.5 text-primary-foreground dark:text-primary"
+                        >
+                            <Link href={redirecturlTemplate.replace('{query}', encodeURIComponent(query))}>
+                                <Search className="h-4 w-4" />
+                                <span className="text-wrap">{redirectmsgTemplate.replace('{query}', query)}</span>
+                            </Link>
+                        </Button>
+                    </div>
                 )}
             </ComboboxContent>
         </Combobox>

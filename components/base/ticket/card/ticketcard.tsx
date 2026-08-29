@@ -1,11 +1,10 @@
-"use client"
-
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { CalendarDays, Clock3, MapPin } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export type TicketCardData = {
     id: string;
@@ -39,7 +38,7 @@ export function TicketCard({
     buyerImageSrc,
 }: TicketCardProps) {
     return (
-        <Card data-ticket-id={id} className={`w-full p-3 overflow-hidden ${className ?? ""}`} >
+        <Card data-ticket-id={id} className={cn("w-full p-3 overflow-hidden", className)} >
             {/* Ticket information */}
             {/* Banner */}
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-3 ">

@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+import { useDebouncedValue } from "@tanstack/react-pacer"
+import { useQuery } from "@tanstack/react-query"
 import { Search, SearchIcon } from "lucide-react"
 
 import {
@@ -36,11 +38,15 @@ type KeywordComboboxProps = {
      */
     onValueChangeAction?: (value: KeywordItemType[]) => void
     /**
-     * Callback function to handel querying keywords.
-     * @param query - The latest query
-     * @returns `Promise<KeywordItemType[]>` A promise that resolves to an array of `KeywordItemType` objects.
+     * Callback function to handle querying keywords.
+     * @param query - The normalized search input.
+     * @returns A promise that resolves to matching keyword items.
      */
     loadItemsAction?: (query: string) => Promise<KeywordItemType[]>
+    /**
+     * Cache-key namespace for asynchronous autocomplete results. Provide a unique key when rendering comboboxes backed by different data sources.
+     */
+    queryKey?: readonly string[]
     /**
      * If true, a query redirect component will be displayed at the bottom of the combobox, allowing users to search for the query on a separate page.
      * @default false
@@ -56,8 +62,25 @@ type KeywordComboboxProps = {
      * @default "Search {query}"
      */
     redirectmsgTemplate?: string
+    /**
+     * Minimum number of characters required to trigger the search.
+     * @default 2
+     */
+    minChars?: number
+    /**
+     * Debounce time in milliseconds for the search input.
+     * @default 500
+     */
     debounceMs?: number
+    /**
+     * Placeholder text for the input field.
+     * @default "Search keywords"
+     */
     placeholder?: string
+    /**
+     * If true, the combobox will be disabled.
+     * @default false
+     */
     disabled?: boolean
     className?: string
 }
@@ -67,59 +90,53 @@ export function KeywordCombobox({
     items = [],
     onValueChangeAction,
     loadItemsAction,
+    queryKey = [],
     queryRedirect = false,
-    debounceMs = 300,
-    placeholder = "Search event keywords",
+    minChars = 2,
+    debounceMs = 500,
+    placeholder = "Search keywords",
     disabled = false,
     redirecturlTemplate = "/search/?q={query}",
     redirectmsgTemplate = "Search {query}",
     className,
 }: KeywordComboboxProps) {
+    const anchor = useComboboxAnchor()
     const [query, setQuery] = React.useState("")
-    const [asyncItems, setAsyncItems] = React.useState<KeywordItemType[]>([])
-    const [loading, setLoading] = React.useState(false)
-
-    React.useEffect(() => {
+    
+    const normalizedQuery = query.trim()
+    const [debouncedQuery, queryDebouncer] = useDebouncedValue(
+        normalizedQuery,
+        { wait: debounceMs },
+        (state) => state.isPending
+    )
+    
+    const shouldSearch = Boolean(loadItemsAction && debouncedQuery.length >= minChars)
+    const loadItems = React.useCallback(() => {
         if (!loadItemsAction) {
-            return
+            return Promise.resolve<KeywordItemType[]>([])
         }
 
-        const search = query.trim()
+        return loadItemsAction(debouncedQuery)
+    }, [debouncedQuery, loadItemsAction])
+    const {
+        data: asyncItems = [],
+        isFetching,
+    } = useQuery({
+        queryKey: [...queryKey, "keyword-autocomplete", debouncedQuery],
+        queryFn: loadItems,
+        enabled: shouldSearch,
+        staleTime: 1000 * 60,
+        gcTime: 1000 * 60 * 5,
+        retry: 1,
+        refetchOnWindowFocus: false,
+    })
 
-        if (!search) {
-            setAsyncItems([])
-            return
-        }
-        setLoading(true)
-        
-        let cancelled = false
-
-        const timer = window.setTimeout(async () => {
-            try {
-                const results = await loadItemsAction(search)
-
-                if (!cancelled) {
-                    setAsyncItems(results)
-                }
-            } catch {
-                if (!cancelled) {
-                    setAsyncItems([])
-                }
-            } finally {
-                if (!cancelled) {
-                    setLoading(false)
-                }
-            }
-        }, debounceMs)
-
-        return () => {
-            cancelled = true
-            window.clearTimeout(timer)
-        }
-    }, [query, debounceMs, loadItemsAction])
+    const isDebouncing = Boolean(
+        loadItemsAction && normalizedQuery && queryDebouncer.state
+    )
+    const loading = shouldSearch && (isDebouncing || isFetching)
 
     const displayedItems = loadItemsAction ? asyncItems : items
-    const anchor = useComboboxAnchor()
 
     return (
         <Combobox
@@ -130,7 +147,6 @@ export function KeywordCombobox({
             itemToStringValue={(item: KeywordItemType) => item.value}
             disabled={disabled}
             onValueChange={(nextValue) => {
-                // console.log("KeywordCombobox onValueChange:", nextValue)
                 onValueChangeAction?.(nextValue)
             }}
         >
@@ -149,12 +165,7 @@ export function KeywordCombobox({
 
                             <ComboboxChipsInput
                                 value={query}
-                                onChange={(event) => {
-                                    if (!event.target.value) {
-                                        setLoading(false)
-                                    }
-                                    setQuery(event.target.value)
-                                }}
+                                onChange={(event) => setQuery(event.target.value)}
                                 placeholder={
                                     selectedValues.length > 0 ? "" : placeholder
                                 }
@@ -175,7 +186,9 @@ export function KeywordCombobox({
                 ) : (
                     <>
                         <ComboboxEmpty>
-                            {query ? "No keywords found." : "Start typing to search."}
+                            {debouncedQuery.length >= minChars ? 
+                                "No keywords found" : minChars <= 1 ? 
+                                    "Start typing to search" : `Enter at least ${minChars} characters to search`}
                         </ComboboxEmpty>
 
                         <ComboboxList>
@@ -197,9 +210,9 @@ export function KeywordCombobox({
                             variant="link"
                             className="flex px-4 py-3 h-fit items-center justify-start gap-2.5 text-primary-foreground dark:text-primary"
                         >
-                            <Link href={redirecturlTemplate.replace('{query}', encodeURIComponent(query))}>
+                            <Link href={redirecturlTemplate.replace('{query}', encodeURIComponent(normalizedQuery))}>
                                 <Search className="h-4 w-4" />
-                                <span className="text-wrap">{redirectmsgTemplate.replace('{query}', query)}</span>
+                                <span className="text-wrap">{redirectmsgTemplate.replace('{query}', normalizedQuery)}</span>
                             </Link>
                         </Button>
                     </div>

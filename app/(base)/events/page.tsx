@@ -75,24 +75,24 @@ const searchItems: KeywordItemType[] = [
 
 
 export default function EventsPage() {
-    // const itemSearch = useCallback(async (
+    // const itemSearch = React.useCallback(async (
     //   query: string,
     // ): Promise<KeywordItemType[]> => {
-    //   // Simulate network delay
-    //   await new Promise((resolve) => {
-    //     setTimeout(resolve, Math.random() * 5000 + 100);
-    //   });
-    
-    //   // Simulate occasional network errors (1% chance)
-    //   if (Math.random() < 0.01 || query === 'will_error') {
-    //     return [];
-    //   }
-    
-    //   return searchItems.filter((item) => {
-    //     return item.label.toLowerCase().includes(query.toLowerCase());
-    //   });
+    //     console.log(`/auto-complete?q=${query}`);
+    //     // Simulate network delay
+    //     await new Promise((resolve) => {
+    //         setTimeout(resolve, Math.random() * 5000 + 100);
+    //     });
+        
+    //     // Simulate occasional network errors (30% chance)
+    //     if (Math.random() < 0.3 || query === 'will_error') {
+    //         return Promise.reject(new Error("Network error occurred"));
+    //     }
+        
+    //     return searchItems.filter((item) => {
+    //         return item.label.toLowerCase().includes(query.toLowerCase());
+    //     });
     // }, [])
-
     return (
         <div className="min-h-dvh bg-background text-foreground md:mx-15 mx-5">
             <div className="mx-auto w-full max-w-[100rem] pb-4 pt-24 px-2 sm:px-8 lg:px-9">

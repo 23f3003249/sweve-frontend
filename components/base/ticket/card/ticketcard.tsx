@@ -38,13 +38,13 @@ export function TicketCard({
     buyerImageSrc,
 }: TicketCardProps) {
     return (
-        <Card data-ticket-id={id} className={cn("w-full p-3 overflow-hidden", className)} >
+        <Card data-ticket-id={id} className={cn("w-full max-w-3xl p-2 overflow-hidden", className)} >
             {/* Ticket information */}
             {/* Banner */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-3 ">
-                <div className="w-full shrink-0 sm:w-28">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3 ">
+                <div className="w-full shrink-0 sm:w-40">
 
-                    <AspectRatio ratio={1} >
+                    <AspectRatio ratio={3 / 2} >
                         <Image
                             src={imageSrc}
                             alt={imageAlt ?? `${eventName} banner`}
@@ -54,15 +54,13 @@ export function TicketCard({
                     </AspectRatio>
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col justify-center ">
-                    {/* Event name - responsive title size (text-lg mobile, text-2xl desktop) */}
+                    {/* Event name - responsive title size (text-base mobile, text-lg desktop) */}
                     <div className="flex items-center gap-2">
-                        <h3 className="truncate text-lg font-semibold sm:text-2xl">{eventName}</h3>
-                        {/*badge hidden on mobile, shown inline with buyer row instead */}
-                        <Badge className="hidden font-semibold sm:ml-2 sm:inline-flex">{ticketType}</Badge>
+                        <h3 className="truncate text-base font-semibold sm:text-lg">{eventName}</h3>
                     </div>
 
                     {/* Date and time */}
-                    <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm ">
+                    <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs ">
                         <div className="flex items-center gap-1.5">
                             <CalendarDays className="size-4 shrink-0 text-primary" />
                             <span>{eventDate}</span>
@@ -73,15 +71,15 @@ export function TicketCard({
                         </div>
                     </div>
                     {/* Location */}
-                    <div className="mt-2 flex items-center gap-1.5 text-sm ">
+                    <div className="mt-2 flex items-center gap-1.5 text-xs">
                         <MapPin className="size-4 shrink-0 text-primary" />
                         <span className="truncate">{eventLocation}</span>
                     </div>
 
-                    {/* Mobile-only row with badge + buyer side by side */}
-                    <div className="mt-2 flex items-center gap-2 sm:hidden">
-                        <Badge className="font-semibold">{ticketType}</Badge>
-                        <div className="flex items-center gap-1.5 text-sm font-medium">
+                    {/* Badge & Mobile Buyer row after venue */}
+                    <div className="mt-2 flex items-center gap-3">
+                        <Badge className="font-semibold rounded-sm">{ticketType}</Badge>
+                        <div className="flex items-center gap-1.5 text-xs font-medium sm:hidden">
                             <Avatar className="size-6" size="sm">
                                 <AvatarImage src={buyerImageSrc} alt={buyerName} />
                                 <AvatarFallback>{buyerName.charAt(0).toUpperCase()}</AvatarFallback>
@@ -93,9 +91,9 @@ export function TicketCard({
                 </div>
                 {/*Right-side ticket + buyer section */}
                 {/*hidden on mobile (buyer shown above), desktop layout preserved */}
-                <div className="hidden shrink-0 flex-col items-end justify-center gap-2 sm:pt-0 sm:pr-4 sm:flex">
+                <div className="hidden shrink-0 flex-col items-end justify-cecenter gap-2 sm:pt-0 sm:pr-2 sm:flex">
                     {/* Buyer */}
-                    <div className="flex items-center gap-1.5 text-sm font-medium">
+                    <div className="flex items-center gap-1.5 text-xs font-medium">
                         <Avatar className="size-8" size="sm">
                             <AvatarImage src={buyerImageSrc} alt={buyerName} />
                             <AvatarFallback>{buyerName.charAt(0).toUpperCase()}</AvatarFallback>

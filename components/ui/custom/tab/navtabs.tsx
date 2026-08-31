@@ -8,6 +8,11 @@ type NavTabProps = {
     tabs: TabItem[]
 };
 
+/**
+ * ### Nav Tabs
+ * A wrapper component around `LineTabs` that automatically determines the active tab based on the current pathname.
+ * It uses the `usePathname` hook from Next.js to get the current path and find the corresponding active tab from the provided tabs.
+ */
 export function NavTabs({ 
     className, 
     tabs,

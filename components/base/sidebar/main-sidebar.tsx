@@ -7,7 +7,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
     type LucideIcon,
-    Building2, Compass, House, LayoutDashboard, ChevronLeft, ChevronRight, Ticket, Search, Info, Sparkle,
+    ChevronLeft, ChevronRight, Info,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -49,24 +49,9 @@ export type NavigationItem = {
     HlocalPropAnchor?: string
 }
 
-export const iconMap: Record<string, LucideIcon> = {
-    "/": House,
-    "/events": Compass,
-    "/organizations": Building2,
-    "/tickets": Ticket,
-    "/dashboard": LayoutDashboard,
-    "/search": Search,
-    "/create": Sparkle
-}
-
 export function MainSidebar({ navItems }: { navItems: NavigationItem[] }) {
-    navItems.forEach((item) => {
-        if (!item.icon) {
-            item.icon = iconMap[item.href]
-        }
-    })
-
     const pathname = usePathname()
+
     const [mobilePage, setMobilePage] = useState(0)
     const isActive = (href: string) => {
         if (href === "/") return pathname === "/"
@@ -226,7 +211,7 @@ function SidebarItem({
     )
 }
 
-function Item({
+export function Item({
     item,
     Icon,
     active,

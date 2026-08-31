@@ -1,21 +1,15 @@
 import { Fragment } from "react"
-import Link from "next/link"
 import {
-    type LucideIcon, ChevronLeft, ChevronRight, Info,
+    ChevronLeft, ChevronRight, Info,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
-import { iconMap, NavigationItem } from "./main-sidebar"
+import { Item, type NavigationItem } from "./main-sidebar"
 
 export function MainSidebarSkeleton({ navItems }: { navItems: NavigationItem[] }) {
-    navItems.forEach((item) => {
-        if (!item.icon) {
-            item.icon = iconMap[item.href]
-        }
-    })
 
 
     const MOBILE_NAV_SLOTS = 5
@@ -57,11 +51,15 @@ export function MainSidebarSkeleton({ navItems }: { navItems: NavigationItem[] }
                 >
                     {navItems.map((item) => (
                         <Fragment key={item.href}>
-                            <SidebarItem
-                                item={item}
-                                active={false}
-                                mobile={false}
-                            />
+                            {
+                                !item.localPropAnchor && 
+                                <Item 
+                                    item={item} 
+                                    active={false} 
+                                    mobile={false} 
+                                    Icon={item.icon || Info} 
+                                />
+                            }
 
                             {item.separatorAfter && <Separator />}
                         </Fragment>
@@ -82,11 +80,13 @@ export function MainSidebarSkeleton({ navItems }: { navItems: NavigationItem[] }
             >
                 <nav className="flex items-center justify-around gap-1 px-2 py-2">
                     {mobileVisibleItems.map((item) => (
-                        <SidebarItem
+                        !item.localPropAnchor && 
+                        <Item 
                             key={item.href}
-                            item={item}
-                            active={false}
+                            item={item} 
+                            active={false} 
                             mobile
+                            Icon={item.icon || Info} 
                         />
                     ))}
 
@@ -108,77 +108,5 @@ export function MainSidebarSkeleton({ navItems }: { navItems: NavigationItem[] }
                 </nav>
             </aside>
         </>
-    )
-}
-
-function SidebarItem({
-    item,
-    active,
-    mobile,
-}: {
-    item: NavigationItem
-    active: boolean
-    mobile: boolean
-}) {
-    const Icon = item.icon || Info
-
-    if (item.localPropAnchor) {
-    }
-
-    if (item.HlocalPropAnchor) {
-    }
-
-    return (
-        !item.localPropAnchor && 
-        <Item item={item} active={active} mobile={mobile} Icon={Icon} />
-    )
-}
-
-function Item({
-    item,
-    Icon,
-    active,
-    mobile,
-}: {
-    item: NavigationItem
-    Icon: LucideIcon
-    active: boolean
-    mobile: boolean
-}) {
-    return (
-        <Button
-            variant={item.special ? "default" : (active ? "secondary" : "ghost")}
-            asChild
-            className={cn(
-                "shrink-0 rounded-xl transition-all duration-300 ease-out",
-                !item.special && "text-muted-foreground",
-                item.special ? "hover:bg-primary text-zinc-900" : "hover:text-foreground",
-                !item.special && active && "text-foreground",
-
-                mobile
-                    ? "h-11 w-11 justify-center p-0"
-                    : "h-10 w-full justify-start gap-3 px-3"
-            )}
-        >
-            <Link
-                href={item.href}
-                aria-label={item.label}
-                aria-current={active ? "page" : undefined}
-            >
-                <Icon className={cn("shrink-0", mobile ? "size-5" : "size-4")} />
-
-                {!mobile && (
-                    <span
-                        className={cn(
-                            "whitespace-nowrap",
-                            "opacity-0 transition-opacity duration-200",
-                            "group-hover:opacity-100"
-                        )}
-                    >
-                        {item.label}
-                    </span>
-                )}
-            </Link>
-        </Button>
     )
 }

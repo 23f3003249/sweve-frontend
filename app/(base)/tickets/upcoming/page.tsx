@@ -16,6 +16,7 @@ export default function TicketPage() {
             ticketStatus: "upcoming",
             buyerName: "Alex Chen",
             buyerImageSrc: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80",
+            eventType: "inperson",
         },
         {
             id: "ticket-2",
@@ -25,11 +26,12 @@ export default function TicketPage() {
             imageAlt: "AI Workshop",
             eventDate: "Dec 3, 2027",
             eventstartTime: "10:00 AM",
-            eventLocation: "Kolkata, India",
+            eventLocation: "Online",
             ticketType: "General",
             ticketStatus: "upcoming",
             buyerName: "Alex Chen",
             buyerImageSrc: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80",
+            eventType: "online",
         },
         {
             id: "ticket-4",
@@ -39,11 +41,12 @@ export default function TicketPage() {
             imageAlt: "React Conference",
             eventDate: "Mar 20, 2027",
             eventstartTime: "09:30 AM",
-            eventLocation: "Bangalore, India",
+            eventLocation: "Hybrid - Bangalore & Virtual",
             ticketType: "VIP",
             ticketStatus: "upcoming",
             buyerName: "Alex Chen",
             buyerImageSrc: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=100&q=80",
+            eventType: "hybrid",
         },
         {
             id: "ticket-5",
@@ -58,6 +61,7 @@ export default function TicketPage() {
             ticketStatus: "upcoming",
             buyerName: "Alex Chen",
             buyerImageSrc: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=100&q=80",
+            eventType: "inperson",
         }
     ]
 

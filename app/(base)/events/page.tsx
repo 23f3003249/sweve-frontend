@@ -1,5 +1,5 @@
-import { EventCarousel, EventCarouselItem, type EventCardData } from "@/components/events/cardcarousel";
-import { EventCard } from "@/components/events/card/eventcard";
+import { EventCarousel, EventCarouselItem, type EventCardData } from "@/components/base/events/cardcarousel";
+import { EventCard } from "@/components/base/events/card/eventcard";
 import { KeywordCombobox, type KeywordItemType } from "@/components/ui/custom/keyword-combobox";
 
 
@@ -82,12 +82,12 @@ export default function EventsPage() {
     //   await new Promise((resolve) => {
     //     setTimeout(resolve, Math.random() * 5000 + 100);
     //   });
-    
+
     //   // Simulate occasional network errors (1% chance)
     //   if (Math.random() < 0.01 || query === 'will_error') {
     //     return [];
     //   }
-    
+
     //   return searchItems.filter((item) => {
     //     return item.label.toLowerCase().includes(query.toLowerCase());
     //   });

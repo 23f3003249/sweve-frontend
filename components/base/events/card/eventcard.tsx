@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import type { EventCardData } from "@/components/events/cardcarousel"
+import type { EventCardData } from "@/components/base/events/cardcarousel"
 import { BookmarkButton } from "@/components/ui/custom/button/bookmarkbutton"
 import { ShareButton, type ShareData } from "@/components/ui/custom/button/sharebutton"
 

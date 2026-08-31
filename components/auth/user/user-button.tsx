@@ -54,6 +54,7 @@ export type UserButtonProps = {
   className?: string
   dropdownClassName?: string
   align?: "center" | "end" | "start" | undefined
+  side?: "top" | "right" | "bottom" | "left"
   sideOffset?: number
   size?: "default" | "icon"
   variant?:
@@ -98,6 +99,7 @@ function renderUserLink(
  *
  * @param className - Additional CSS classes applied to the button trigger
  * @param align - Alignment of the dropdown menu relative to the trigger
+ * @param side - Preferred side of the trigger on which to show the dropdown menu
  * @param sideOffset - Offset between the trigger and the dropdown menu
  * @param size - "icon" renders only the avatar; "default" renders a full button with label and chevron
  * @param variant - Visual variant of the trigger button
@@ -109,6 +111,7 @@ export function UserButton({
   className,
   dropdownClassName,
   align,
+  side,
   sideOffset,
   size = "default",
   variant = "ghost",
@@ -177,6 +180,7 @@ export function UserButton({
 
       <DropdownMenuContent
         className="min-w-40 md:min-w-56 max-w-[48svw]"
+        side={side}
         sideOffset={sideOffset}
         align={align}
       >

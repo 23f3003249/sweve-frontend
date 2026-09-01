@@ -58,8 +58,8 @@ export function TicketCard({
             </div>
             {/* Ticket information */}
             {/* Banner */}
-            <div className="flex flex-col h-full gap-3 sm:flex-row sm:items-center sm:gap-6 ">
-                <div className="w-full shrink-0 sm:w-45">
+            <div className="flex flex-col h-full gap-1 sm:flex-row sm:items-center sm:gap-6 ">
+                <div className="w-full shrink-0 sm:w-45 rounded-lg border-2 border-border">
 
                     <AspectRatio ratio={1} >
                         <Image
@@ -72,32 +72,34 @@ export function TicketCard({
                 </div>
                 <div className="flex min-w-0 pr-6 flex-1 h-full flex-col">
                     {/* Event name - responsive title size (text-base mobile, text-lg desktop) */}
-                    <div className="flex items-center gap-2">
-                        <h3 className="text-2xl font-semibold md:text-3xl">{eventName}</h3>
-                    </div>
+                    <h1 className="text-2xl mt-2 font-semibold lg:text-3xl">
+                        {eventName.length > 27 ? eventName.slice(0, 27) + "..." : eventName}
+                    </h1>
 
                     {/* Date and time */}
                     <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-muted-foreground">
                         <div className="flex items-center gap-2">
-                            <CalendarDays className="size-5 shrink-0 text-primary/80" />
+                            <CalendarDays className="size-4.5 shrink-0 text-primary dark:text-primary/70" />
                             <span>{eventDate}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Clock3 className="size-5 shrink-0 text-primary/80" />
+                            <Clock3 className="size-4.5 shrink-0 text-primary dark:text-primary/70" />
                             <span>{eventstartTime}</span>
                         </div>
                     </div>
                     {/* Location */}
                     <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-                        <MapPin className="size-5 shrink-0 text-primary/80" />
+                        <MapPin className="size-4.5 shrink-0 text-primary dark:text-primary/70" />
                         <span className="truncate">{eventLocation}</span>
                     </div>
 
-                    <div className="mt-5 w-fit flex items-center gap-2 rounded-sm py-2 px-3 font-semibold tracking-wide border border-border bg-accent text-accent-foreground">
-                        <Ticket className="size-4.5 text-primary/80" />
-                        <span className="text-accent-foreground">
-                            {ticketType}
-                        </span>
+                    <div className="mt-5 flex flex-1 gap-5 items-end justify-between">
+                        <div className="w-fit flex items-center gap-2 rounded-sm py-2 px-3 border border-border bg-accent">
+                            <Ticket className="size-4 text-primary dark:text-primary/80" />
+                            <span className="text-accent-foreground text-xs font-semibold tracking-wide">
+                                {ticketType}
+                            </span>
+                        </div>
                     </div>
 
                 </div>

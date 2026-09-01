@@ -7,7 +7,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
     type LucideIcon,
-    Building2, Compass, House, LayoutDashboard, ChevronLeft, ChevronRight, Ticket, Search, Info, Sparkle,
+    ChevronLeft, ChevronRight, Info,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -49,24 +49,9 @@ export type NavigationItem = {
     HlocalPropAnchor?: string
 }
 
-const iconMap: Record<string, LucideIcon> = {
-    "/": House,
-    "/events": Compass,
-    "/organizations": Building2,
-    "/tickets": Ticket,
-    "/dashboard": LayoutDashboard,
-    "/search": Search,
-    "/create": Sparkle
-}
-
 export function MainSidebar({ navItems }: { navItems: NavigationItem[] }) {
-    navItems.forEach((item) => {
-        if (!item.icon) {
-            item.icon = iconMap[item.href]
-        }
-    })
-
     const pathname = usePathname()
+
     const [mobilePage, setMobilePage] = useState(0)
     const isActive = (href: string) => {
         if (href === "/") return pathname === "/"
@@ -101,13 +86,13 @@ export function MainSidebar({ navItems }: { navItems: NavigationItem[] }) {
                     "overflow-hidden rounded-2xl",
                     "border border-border/50",
                     "bg-background/60 backdrop-blur-xl",
-                    "shadow-lg",
+                    "shadow-md",
                     "transition-[width] duration-300 ease-out"
                 )}
+                aria-label="Main navigation desktop"
             >
                 <nav
                     className="flex flex-col gap-1 p-1.5"
-                    aria-label="Main navigation"
                 >
                     {navItems.map((item) => (
                         <Fragment key={item.href}>
@@ -129,10 +114,10 @@ export function MainSidebar({ navItems }: { navItems: NavigationItem[] }) {
                     "fixed inset-x-0 bottom-0 z-40 sm:hidden",
                     "border-t border-border/50",
                     "bg-background/60 backdrop-blur-xl",
-                    "shadow-lg",
+                    "shadow-md",
                     "pb-[env(safe-area-inset-bottom)]"
                 )}
-                aria-label="Main navigation"
+                aria-label="Main navigation mobile"
             >
                 <nav className="flex items-center justify-around gap-1 px-2 py-2">
                     {mobileVisibleItems.map((item) => (
@@ -226,7 +211,7 @@ function SidebarItem({
     )
 }
 
-function Item({
+export function Item({
     item,
     Icon,
     active,

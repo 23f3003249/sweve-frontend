@@ -1,6 +1,6 @@
 import HeroCarousel, { type HeroCarouselSlide, } from "@/components/base/herocarousel";
-import { EventCard } from "@/components/events/card/eventcard";
-import { EventCardData, EventCarousel, EventCarouselItem } from "@/components/events/cardcarousel";
+import { EventCard } from "@/components/base/events/card/eventcard";
+import { EventCardData, EventCarousel, EventCarouselItem } from "@/components/base/events/cardcarousel";
 
 export default function Home() {
   const heroSlides: HeroCarouselSlide[] = [

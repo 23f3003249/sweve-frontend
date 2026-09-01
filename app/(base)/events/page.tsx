@@ -1,5 +1,5 @@
-import { EventCarousel, EventCarouselItem, type EventCardData } from "@/components/events/cardcarousel";
-import { EventCard } from "@/components/events/card/eventcard";
+import { EventCarousel, EventCarouselItem, type EventCardData } from "@/components/base/events/cardcarousel";
+import { EventCard } from "@/components/base/events/card/eventcard";
 import { KeywordCombobox, type KeywordItemType } from "@/components/ui/custom/keyword-combobox";
 
 

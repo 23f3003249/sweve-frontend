@@ -2,8 +2,8 @@ import {
     OrganizationCarousel,
     OrganizationCarouselItem,
     type OrganizationCardData,
-} from "@/components/organizations/organizationcarousel"
-import { OrganizationCard } from "@/components/organizations/card/organizationcard"
+} from "@/components/base/organizations/organizationcarousel"
+import { OrganizationCard } from "@/components/base/organizations/card/organizationcard"
 import { KeywordCombobox } from "@/components/ui/custom/keyword-combobox"
 
 const organizations: OrganizationCardData[] = [

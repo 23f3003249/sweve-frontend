@@ -4,6 +4,7 @@ import { CalendarDays, Clock3, MapPin, Monitor, Ticket, Wifi } from "lucide-reac
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { AvatarStacked, type AvatarItemType } from "@/components/ui/custom/avatar/avatar-stacked";
 
 export type EventType = "inperson" | "online" | "hybrid";
 
@@ -20,6 +21,7 @@ export type TicketCardData = {
     buyerName: string;
     buyerImageSrc?: string;
     eventType?: EventType;
+    avatarItems?: AvatarItemType[];
 }
 
 export type TicketCardProps = TicketCardData & {
@@ -49,9 +51,10 @@ export function TicketCard({
     eventLocation,
     ticketType,
     eventType,
+    avatarItems,
 }: TicketCardProps) {
     return (
-        <Card data-ticket-id={id} className={cn("w-full max-w-3xl p-2.5 sm:h-50 overflow-hidden rounded-lg relative ", className)} >
+        <Card data-ticket-id={id} className={cn("w-full max-w-3xl p-2.5 sm:h-60 md:h-50 overflow-hidden rounded-lg relative ", className)} >
             {/* Event type icon - top right */}
             <div className="absolute top-5 right-5 z-10">
                 <EventTypeIcon type={eventType} />
@@ -59,7 +62,7 @@ export function TicketCard({
             {/* Ticket information */}
             {/* Banner */}
             <div className="flex flex-col h-full gap-1 sm:flex-row sm:items-center sm:gap-6 ">
-                <div className="w-full shrink-0 sm:w-45 rounded-lg border-2 border-border">
+                <div className="w-full shrink-0 sm:w-45 rounded-lg border border-muted">
 
                     <AspectRatio ratio={1} >
                         <Image
@@ -94,12 +97,13 @@ export function TicketCard({
                     </div>
 
                     <div className="mt-5 flex flex-1 gap-5 items-end justify-between">
-                        <div className="w-fit flex items-center gap-2 rounded-sm py-2 px-3 border border-border bg-accent">
-                            <Ticket className="size-4 text-primary dark:text-primary/80" />
-                            <span className="text-accent-foreground text-xs font-semibold tracking-wide">
+                        <div className="w-fit flex items-center gap-2 rounded-full py-1.5 px-3 text-primary-foreground bg-primary dark:text-background">
+                            <Ticket className="size-4" />
+                            <span className="text-xs font-semibold tracking-wide">
                                 {ticketType}
                             </span>
                         </div>
+                        {avatarItems && <AvatarStacked items={avatarItems} maxItems={3} size="sm"/>}
                     </div>
 
                 </div>

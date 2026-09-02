@@ -45,7 +45,9 @@ export default function BaseLayout({
                             />
                         </Suspense>
                     </div>
-                    {children}
+                    <div className="mt-5">
+                        {children}
+                    </div>
                 </div>
             </div>
         </div>

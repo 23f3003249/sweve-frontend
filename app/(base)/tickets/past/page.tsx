@@ -1,6 +1,20 @@
-import { TicketCard, type TicketCardData } from "@/components/base/ticket/card/ticketcard";
+import { type TicketCardData } from "@/components/base/ticket/card/ticketcard";
+import { TicketCalendarSection } from "@/components/base/ticket/ticket-calendar-section";
 
-export default function TicketPage() {
+export default function TicketPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ date?: string }>
+}) {
+    return <TicketPageContent searchParams={searchParams} />
+}
+
+async function TicketPageContent({
+    searchParams,
+}: {
+    searchParams: Promise<{ date?: string }>
+}) {
+    const params = await searchParams
 
     const tickets: TicketCardData[] = [
         {
@@ -50,12 +64,5 @@ export default function TicketPage() {
         }
     ]
 
-    return (
-        <div className="mt-5 w-full">
-            {/* Tickets */}
-            <div className="space-y-4 ">
-                {tickets.map((ticket) => <TicketCard key={ticket.id} {...ticket} />)}
-            </div>
-        </div>
-    )
+    return <TicketCalendarSection tickets={tickets} selectedDateStr={params.date} />
 }

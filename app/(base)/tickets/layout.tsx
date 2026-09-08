@@ -35,6 +35,13 @@ export default function BaseLayout({
         { date: "2026-09-15" },
         { date: "2026-09-20" },
     ]
+    const currentDate = new Date(calendarEvents[0].date)
+    const formattedDate = currentDate.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    })
 
     return (
         <div className="min-h-dvh bg-background text-foreground lg:mx-15 md:mx-15 sm:mx-15">
@@ -53,14 +60,25 @@ export default function BaseLayout({
                             />
                         </Suspense>
                     </div>
-                    <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+                    <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_350px]">
                         <div>
+                            <div className="mb-5 flex items-center gap-4">
+                                <span className="shrink-0 text-md font-medium">
+                                    {formattedDate}
+                                </span>
+
+                                <div className="h-px flex-1 bg-border" />
+
+                            </div>
+
                             {children}
                         </div>
-                        <div className="lg:sticky lg:top-24 lg:self-start flex justify-center" >
-                            <Suspense>
-                                <AppCalender events={calendarEvents} />
-                            </Suspense>
+                        <div className="flex flex-col items-center gap-6">
+                            <div className="w-full lg:sticky lg:top-24 ">
+                                <Suspense>
+                                    <AppCalender events={calendarEvents} />
+                                </Suspense>
+                            </div>
                         </div>
                     </div>
                 </div>

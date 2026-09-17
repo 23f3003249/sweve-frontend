@@ -109,6 +109,7 @@ export default function BaseLayout({
                                 </Suspense>
                                 <div className="mt-10 h-100 max-w-75 ">
                                     <AppMap
+                                        className="rounded-lg border"
                                         events={mapEvents}
                                         center={[-74.006, 40.7128]}
                                         zoom={10}

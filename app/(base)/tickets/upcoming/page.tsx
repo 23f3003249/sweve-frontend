@@ -95,7 +95,7 @@ const avataritems: AvatarItemType[] = [
 export default function TicketPage() {
 
     return (
-        <div className="w-full">
+        <div className="mt-5 w-full">
             {/* Tickets */}
             <div className="space-y-4 ">
                 {tickets.map((ticket) => <TicketCard key={ticket.id} avatarItems={avataritems} {...ticket} />)}

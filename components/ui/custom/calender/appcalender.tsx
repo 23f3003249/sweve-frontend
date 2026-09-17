@@ -3,6 +3,7 @@
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
 import { useState } from "react"
 import { Progress } from "@/components/ui/progress"
+import { cn } from "@/lib/utils"
 
 export type CalendarEvent = {
     date: string
@@ -10,6 +11,7 @@ export type CalendarEvent = {
 
 type AppCalenderProps = {
     events?: CalendarEvent[]
+    className?: string
 }
 const progressValues = [20, 40, 65, 80, 100]
 
@@ -38,7 +40,7 @@ function getProgressFromEventCount(eventCount: number) {
     return progressValues[index]
 }
 
-export function AppCalender({ events = [] }: AppCalenderProps) {
+export function AppCalender({ events = [], className }: AppCalenderProps) {
     const [date, setDate] = useState<Date | undefined>(new Date());
     const eventCountMap = new Map<string, number>()
 
@@ -53,7 +55,7 @@ export function AppCalender({ events = [] }: AppCalenderProps) {
             selected={date}
             onSelect={setDate}
             showOutsideDays={false}
-            className="rounded-lg border [--cell-size:--spacing(9)] md:[--cell-size:--spacing(10)]"
+            className={cn("rounded-lg border [--cell-size:--spacing(9)] md:[--cell-size:--spacing(10)]", className)}
             components={{
                 DayButton: ({ children, modifiers, day, ...props }) => {
                     const dateKey = getDateKey(day.date)

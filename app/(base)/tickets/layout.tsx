@@ -2,6 +2,7 @@ import { NavTabs } from "@/components/ui/custom/tab/navtabs"
 import { type TabItem } from "@/components/ui/custom/tab/line-tabs"
 import { Suspense } from "react"
 import { AppCalender } from "@/components/ui/custom/calender/appcalender"
+import { AppMap } from "@/components/ui/custom/map/appmap";
 
 const navigationTabs: TabItem[] = [
     {
@@ -35,6 +36,32 @@ export default function BaseLayout({
         { date: "2026-09-15" },
         { date: "2026-09-20" },
     ]
+    const mapEvents = [
+        {
+            id: "1",
+            date: "2026-09-20",
+            title: "Music Festival",
+            venue: "Central Park",
+            latitude: 40.7829,
+            longitude: -73.9654,
+        },
+        {
+            id: "2",
+            date: "2026-09-22",
+            title: "Tech Meetup",
+            venue: "Brooklyn Expo",
+            latitude: 40.6782,
+            longitude: -73.9442,
+        },
+        {
+            id: "3",
+            date: "2026-09-25",
+            title: "Art Exhibition",
+            venue: "Manhattan Gallery",
+            latitude: 40.7128,
+            longitude: -74.006,
+        },
+    ];
     const currentDate = new Date(calendarEvents[0].date)
     const formattedDate = currentDate.toLocaleDateString("en-US", {
         weekday: "long",
@@ -66,9 +93,7 @@ export default function BaseLayout({
                                 <span className="shrink-0 text-md font-medium">
                                     {formattedDate}
                                 </span>
-
                                 <div className="h-px flex-1 bg-border" />
-
                             </div>
 
                             {children}
@@ -78,6 +103,13 @@ export default function BaseLayout({
                                 <Suspense>
                                     <AppCalender events={calendarEvents} />
                                 </Suspense>
+                                <div className="mt-10 h-100 max-w-75 ">
+                                    <AppMap
+                                        events={mapEvents}
+                                        center={[-74.006, 40.7128]}
+                                        zoom={10}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

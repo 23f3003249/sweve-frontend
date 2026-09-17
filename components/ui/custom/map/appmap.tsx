@@ -1,6 +1,6 @@
 "use client"
 
-import { Map, MapMarker, MarkerContent, MarkerPopup, MarkerTooltip } from "@/components/ui/map";
+import { Map, MapMarker, MarkerContent, MarkerTooltip } from "@/components/ui/map";
 
 
 export interface EventLocation {
@@ -33,14 +33,6 @@ export function AppMap({
                             <button type="button" className="bg-primary size-4 rounded-full border-2 border-foreground shadow-lg cursor-pointer" aria-label={`View ${event.title}`} />
                         </MarkerContent>
                         <MarkerTooltip>{event.venue}</MarkerTooltip>
-                        <MarkerPopup>
-                            <div className="space-y-1">
-                                <p className="text-foreground font-medium">{event.venue}</p>
-                                <p className="text-muted-foreground text-xs">
-                                    {event.latitude.toFixed(4)}, {event.longitude.toFixed(4)}
-                                </p>
-                            </div>
-                        </MarkerPopup>
                     </MapMarker>
                 ))}
             </Map>

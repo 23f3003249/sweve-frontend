@@ -11,6 +11,7 @@ import {
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
+import { useIsHydrated } from "../auth/use-is-hydrated"
 
 function Calendar({
   className,
@@ -27,7 +28,11 @@ function Calendar({
 }) {
   const defaultClassNames = getDefaultClassNames()
 
+  // Today date causes an hydration error when the server and client render different dates, so we only render the calendar after hydration.
+    const isHydrated = useIsHydrated()
+
   return (
+    isHydrated &&
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
@@ -119,7 +124,7 @@ function Calendar({
           defaultClassNames.range_end
         ),
         today: cn(
-          "rounded-(--cell-radius) bg-muted text-foreground data-[selected=true]:rounded-none",
+          "rounded-(--cell-radius) bg-muted text-foreground data-[selected=true]:rounded-(--cell-radius)",
           defaultClassNames.today
         ),
         outside: cn(

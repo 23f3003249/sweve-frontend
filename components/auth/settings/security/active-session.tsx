@@ -4,6 +4,7 @@ import { useAuth, useRevokeSession, useSession } from "@better-auth-ui/react"
 import type { Session } from "better-auth"
 import Bowser from "bowser"
 import { LogOut, Monitor, Smartphone, X } from "lucide-react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import { Badge } from "@/components/ui/badge"
@@ -18,8 +19,8 @@ import {
 } from "@/components/ui/item"
 import { Spinner } from "@/components/ui/spinner"
 
-function timeAgo(date: Date) {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
+function timeAgo(date: Date, now: number) {
+  const seconds = Math.floor((now - date.getTime()) / 1000)
   const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" })
 
   const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
@@ -55,8 +56,13 @@ export type ActiveSessionProps = {
  * @returns A JSX element containing the active session row
  */
 export function ActiveSession({ activeSession }: ActiveSessionProps) {
+  const [now, setNow] = useState<number | null>(null)
   const { authClient, basePaths, localization, viewPaths, navigate } = useAuth()
   const { data: session } = useSession(authClient, { refetchOnMount: false })
+
+  useEffect(() => {
+    setNow(Date.now())
+  }, [])
 
   const { mutate: revokeSession, isPending: isRevoking } = useRevokeSession(
     authClient,
@@ -87,7 +93,7 @@ export function ActiveSession({ activeSession }: ActiveSessionProps) {
         ) : (
           activeSession.createdAt && (
             <ItemDescription className="capitalize">
-              {timeAgo(activeSession.createdAt)}
+              {now === null ? "..." : timeAgo(activeSession.createdAt, now)}
             </ItemDescription>
           )
         )}

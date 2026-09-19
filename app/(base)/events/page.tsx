@@ -83,12 +83,12 @@ export default function EventsPage() {
     //     await new Promise((resolve) => {
     //         setTimeout(resolve, Math.random() * 5000 + 100);
     //     });
-        
+
     //     // Simulate occasional network errors (30% chance)
     //     if (Math.random() < 0.3 || query === 'will_error') {
     //         return Promise.reject(new Error("Network error occurred"));
     //     }
-        
+
     //     return searchItems.filter((item) => {
     //         return item.label.toLowerCase().includes(query.toLowerCase());
     //     });
@@ -128,7 +128,7 @@ export default function EventsPage() {
                                     price={event.price}
                                     registerUrl={`/events/${event.id}/register`}
                                     href={`/events/${event.id}`}
-                                    actions={['save', 'preview']}
+                                    actions={['save']}
                                 />
                             </EventCarouselItem>
                         ))}

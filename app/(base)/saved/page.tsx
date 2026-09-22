@@ -2,6 +2,7 @@ import { EventCard } from "@/components/base/events/card/eventcard";
 import {
     Pagination,
     PaginationContent,
+    PaginationEllipsis,
     PaginationItem,
     PaginationLink,
 } from "@/components/ui/pagination"
@@ -108,9 +109,9 @@ export default function whistlistPage() {
                     </p>
                 </div>
                 <div className="mt-15">
-                    <h1>Saved Recently</h1>
+                    <h1 className="text-xl md:text-2xl font-semibold mb-4 tracking-tight">Saved Recently</h1>
 
-                    <div className="grid grid-cols-1 gap-6 mt-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {eventData.map(event => (
                             <div key={event.id}>
                                 <EventCard
@@ -124,36 +125,46 @@ export default function whistlistPage() {
                                     price={event.price}
                                     registerUrl={`/events/${event.id}/register`}
                                     href={`/events/${event.id}`}
-                                    actions={['save']} />
+                                    actions={['save']}
+                                    isBookmarked={true}
+                                />
                             </div>
 
                         ))}
                     </div>
-                    <Pagination className="mt-10 justify-center">
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationLink href="#" aria-label="Go to previous page" size="icon">
-                                    <ChevronLeftIcon className="size-4" />
-                                </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">1</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#" isActive>
-                                    2
-                                </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">3</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#" aria-label="Go to next page" size="icon">
-                                    <ChevronRightIcon className="size-4" />
-                                </PaginationLink>
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                    <div className="mt-15 mb-20 sm:mb-16 lg:mb-10">
+                        <Pagination >
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationLink href="#" aria-label="Go to previous page" size="icon">
+                                        <ChevronLeftIcon className="size-4" />
+                                    </PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#">1</PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#" isActive>
+                                        2
+                                    </PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#">3</PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationEllipsis />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#">10</PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#" aria-label="Go to next page" size="icon">
+                                        <ChevronRightIcon className="size-4" />
+                                    </PaginationLink>
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
                 </div>
             </div>
         </div>

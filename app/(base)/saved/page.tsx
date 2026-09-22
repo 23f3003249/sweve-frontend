@@ -22,6 +22,7 @@ const eventData = [
     { id: "10", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/10", },
 ];
 
+// Define the number of items to display per page
 const ITEMS_PER_PAGE = 16;
 
 export default function whistlistPage() {
@@ -54,6 +55,7 @@ export default function whistlistPage() {
                                     registerUrl={`/events/${event.id}/register`}
                                     href={`/events/${event.id}`}
                                     actions={['save']}
+                                    // Check if the event is bookmarked and set the prop accordingly
                                     isBookmarked={true}
                                 />
                             </div>

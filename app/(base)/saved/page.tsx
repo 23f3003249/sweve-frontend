@@ -10,91 +10,19 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
 
 const eventData = [
-    {
-        id: "1",
-        title: "Exclusive Event",
-        imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
-        imageAlt: "Another Great Event",
-        date: "2026-09-20",
-        location: "New York, NY",
-        price: "$150",
-        category: "Concert",
-        registerUrl: "https://example.com/register",
-    },
-    {
-        id: "2",
-        title: "Another Great Event",
-        imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
-        imageAlt: "Another Great Event",
-        date: "2026-09-25",
-        location: "Los Angeles, CA",
-        price: "$200",
-        category: "Art Exhibition",
-        registerUrl: "https://example.com/event/2",
-    },
-    {
-        id: "2",
-        title: "Another Great Event",
-        imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
-        imageAlt: "Another Great Event",
-        date: "2026-09-25",
-        location: "Los Angeles, CA",
-        price: "$200",
-        category: "Art Exhibition",
-        registerUrl: "https://example.com/event/2",
-    },
-    {
-        id: "2",
-        title: "Another Great Event",
-        imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
-        imageAlt: "Another Great Event",
-        date: "2026-09-25",
-        location: "Los Angeles, CA",
-        price: "$200",
-        category: "Art Exhibition",
-        registerUrl: "https://example.com/event/2",
-    }, {
-        id: "2",
-        title: "Another Great Event",
-        imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
-        imageAlt: "Another Great Event",
-        date: "2026-09-25",
-        location: "Los Angeles, CA",
-        price: "$200",
-        category: "Art Exhibition",
-        registerUrl: "https://example.com/event/2",
-    }, {
-        id: "2",
-        title: "Another Great Event",
-        imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
-        imageAlt: "Another Great Event",
-        date: "2026-09-25",
-        location: "Los Angeles, CA",
-        price: "$200",
-        category: "Art Exhibition",
-        registerUrl: "https://example.com/event/2",
-    }, {
-        id: "2",
-        title: "Another Great Event",
-        imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
-        imageAlt: "Another Great Event",
-        date: "2026-09-25",
-        location: "Los Angeles, CA",
-        price: "$200",
-        category: "Art Exhibition",
-        registerUrl: "https://example.com/event/2",
-    }, {
-        id: "2",
-        title: "Another Great Event",
-        imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
-        imageAlt: "Another Great Event",
-        date: "2026-09-25",
-        location: "Los Angeles, CA",
-        price: "$200",
-        category: "Art Exhibition",
-        registerUrl: "https://example.com/event/2",
-    },
+    { id: "1", title: "Exclusive Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-20", location: "New York, NY", price: "$150", category: "Concert", registerUrl: "https://example.com/register", },
+    { id: "2", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/2", },
+    { id: "3", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/3", },
+    { id: "4", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/4", },
+    { id: "5", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/5", },
+    { id: "6", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/6", },
+    { id: "7", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/7", },
+    { id: "8", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/8", },
+    { id: "9", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/9", },
+    { id: "10", title: "Another Great Event", imageSrc: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80", imageAlt: "Another Great Event", date: "2026-09-25", location: "Los Angeles, CA", price: "$200", category: "Art Exhibition", registerUrl: "https://example.com/event/10", },
 ];
+
+const ITEMS_PER_PAGE = 16;
 
 export default function whistlistPage() {
     return (
@@ -102,7 +30,7 @@ export default function whistlistPage() {
             <div className="mx-auto w-full max-w-[100rem] pb-4 pt-24 px-2 sm:px-8 lg:px-9">
                 <div className="space-y-1">
                     <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
-                        My Whistlist
+                        My Whislist
                     </h1>
                     <p className="text-sm text-muted-foreground">
                         Don&apos;t miss out on these exclusive experiences.
@@ -112,7 +40,7 @@ export default function whistlistPage() {
                     <h1 className="text-xl md:text-2xl font-semibold mb-4 tracking-tight">Saved Recently</h1>
 
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {eventData.map(event => (
+                        {eventData.slice(0, ITEMS_PER_PAGE).map(event => (
                             <div key={event.id}>
                                 <EventCard
                                     id={event.id}

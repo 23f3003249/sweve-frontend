@@ -103,12 +103,13 @@ export default function BaseLayout({
                             {children}
                         </div>
                         <div className="flex flex-col items-center gap-6">
-                            <div className="w-full lg:sticky lg:top-24 ">
+                            <div className="lg:sticky lg:top-24 ">
                                 <Suspense>
                                     <AppCalender events={calendarEvents} />
                                 </Suspense>
-                                <div className="mt-10 h-100 max-w-75 ">
+                                <div className="mt-10 h-100 w-75 ">
                                     <AppMap
+                                        className="rounded-lg border"
                                         events={mapEvents}
                                         center={[-74.006, 40.7128]}
                                         zoom={10}

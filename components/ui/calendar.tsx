@@ -29,7 +29,7 @@ function Calendar({
   const defaultClassNames = getDefaultClassNames()
 
   // Today date causes an hydration error when the server and client render different dates, so we only render the calendar after hydration.
-    const isHydrated = useIsHydrated()
+  const isHydrated = useIsHydrated()
 
   return (
     isHydrated &&

@@ -184,7 +184,7 @@ export default function Home() {
       </main>
       <section className="mx-5 md:mx-15">
         <div className="mx-auto w-full max-w-[100rem] px-2 pb-4 pt-24 sm:px-7 lg:px-9">
-          <EventCarousel title="Upcoming Events">
+          <EventCarousel title="Upcoming Events" url="/events">
             {events.map((event) => (
               <EventCarouselItem key={event.id}>
                 <EventCard

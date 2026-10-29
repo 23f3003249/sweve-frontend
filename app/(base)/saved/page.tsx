@@ -1,4 +1,5 @@
-import { TicketCard, type TicketCardData } from "@/components/base/ticket/card/ticketcard";
+import { EventCategoryCard } from "@/components/base/ticket/card/eventcategorycard";
+import { type TicketCardData } from "@/components/base/ticket/card/ticketcard";
 import { type AvatarItemType } from "@/components/ui/custom/avatar/avatar-stacked";
 
 const savedEvents: TicketCardData[] = [
@@ -107,7 +108,7 @@ export default function SavedPage() {
         <div className="mt-5 w-full">
             <div className="space-y-4">
                 {savedEvents.map((event) => (
-                    <TicketCard key={event.id} avatarItems={avatarItems} {...event} />
+                    <EventCategoryCard key={event.id} avatarItems={avatarItems} {...event} />
                 ))}
             </div>
         </div>

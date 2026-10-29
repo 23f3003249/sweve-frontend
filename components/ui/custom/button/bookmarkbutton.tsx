@@ -44,6 +44,8 @@ type BookmarkButtonProps = {
     /** Called when user toggles - should trigger API call */
     onChangeAction?: (saved: boolean) => void
     className?: string
+    /** Visual variant - "default" has background, "ghost" has no background */
+    variant?: "default" | "ghost"
 }
 
 export function BookmarkButton({
@@ -51,6 +53,7 @@ export function BookmarkButton({
     defaultSaved = false,
     onChangeAction,
     className,
+    variant = "default",
 }: BookmarkButtonProps) {
     const [internalIsSaved, setInternalIsSaved] = useState(defaultSaved)
     const isSaved = controlledIsSaved ?? internalIsSaved
@@ -122,7 +125,13 @@ export function BookmarkButton({
             >
                 <Button
                     size="icon"
-                    className="h-11 w-11 bg-secondary text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary"
+                    variant={variant === "ghost" ? "ghost" : "default"}
+                    className={cn(
+                        "h-11 w-11",
+                        variant === "ghost"
+                            ? "text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground"
+                            : "bg-secondary text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary"
+                    )}
                     aria-label={isSaved ? "Remove saved event" : "Save event"}
                     aria-pressed={isSaved}
                     onClick={handleBookmark}

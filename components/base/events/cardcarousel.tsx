@@ -29,13 +29,16 @@ type EventCarouselProps = {
   children: React.ReactNode
   className?: string
   title?: string
-  url?: string
+  category?: string
 }
 
-export function EventCarousel({ children, className, title, url }: EventCarouselProps) {
+export function EventCarousel({ children, className, title, category }: EventCarouselProps) {
+  const url = category
+    ? `/events/category/${encodeURIComponent(category)}`
+    : undefined
   const plugin = React.useMemo(() =>
     WheelGesturesPlugin({})
-  , [])
+    , [])
   return (
     <div className="w-full">
       {title && (

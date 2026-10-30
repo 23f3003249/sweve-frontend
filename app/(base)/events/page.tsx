@@ -50,6 +50,17 @@ const events: EventCardData[] = [
     },
 ]
 
+type EventCarouselData = {
+    title: string
+    category: string
+    events: EventCardData[]
+}
+
+const carousels: EventCarouselData[] = [
+    { title: "Upcoming Events", category: "upcoming", events },
+    { title: "Popular This Week", category: "popular-this-week", events: events.slice(1, 4) },
+]
+
 const searchItems: KeywordItemType[] = [
     { value: "design", label: "Design" },
     { value: "technology", label: "Technology" },
@@ -114,25 +125,31 @@ export default function EventsPage() {
                         redirectmsgTemplate="Search {query} as event"
                     />
 
-                    <EventCarousel title="Upcoming Events" url="/">
-                        {events.map((event) => (
-                            <EventCarouselItem key={event.id}>
-                                <EventCard
-                                    id={event.id}
-                                    title={event.title}
-                                    imageSrc={event.imageSrc}
-                                    imageAlt={event.imageAlt}
-                                    category={event.category}
-                                    date={event.date}
-                                    location={event.location}
-                                    price={event.price}
-                                    registerUrl={`/events/${event.id}/register`}
-                                    href={`/events/${event.id}`}
-                                    actions={['save']}
-                                />
-                            </EventCarouselItem>
-                        ))}
-                    </EventCarousel>
+                    {carousels.map((carousel) => (
+                        <EventCarousel
+                            key={carousel.category}
+                            title={carousel.title}
+                            category={carousel.category}
+                        >
+                            {carousel.events.map((event) => (
+                                <EventCarouselItem key={event.id}>
+                                    <EventCard
+                                        id={event.id}
+                                        title={event.title}
+                                        imageSrc={event.imageSrc}
+                                        imageAlt={event.imageAlt}
+                                        category={event.category}
+                                        date={event.date}
+                                        location={event.location}
+                                        price={event.price}
+                                        registerUrl={`/events/${event.id}/register`}
+                                        href={`/events/${event.id}`}
+                                        actions={['save']}
+                                    />
+                                </EventCarouselItem>
+                            ))}
+                        </EventCarousel>
+                    ))}
                 </div>
             </div>
         </div>

@@ -45,7 +45,9 @@ type BookmarkButtonProps = {
     onChangeAction?: (saved: boolean) => void
     className?: string
     /** Visual variant - "default" has background, "ghost" has no background */
-    variant?: "default" | "ghost"
+    variant?: React.ComponentProps<typeof Button>["variant"]
+    /** Whether to show the "Save" text next to the bookmark icon */
+    showText?: boolean
 }
 
 export function BookmarkButton({
@@ -54,6 +56,7 @@ export function BookmarkButton({
     onChangeAction,
     className,
     variant = "default",
+    showText = false,
 }: BookmarkButtonProps) {
     const [internalIsSaved, setInternalIsSaved] = useState(defaultSaved)
     const isSaved = controlledIsSaved ?? internalIsSaved
@@ -125,9 +128,9 @@ export function BookmarkButton({
             >
                 <Button
                     size="icon"
-                    variant={variant === "ghost" ? "ghost" : "default"}
+                    variant={variant}
                     className={cn(
-                        "h-11 w-11",
+                        "h-11 w-fit min-w-11 px-3 gap-1 ",
                         variant === "ghost"
                             ? "text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground"
                             : "bg-secondary text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary"
@@ -142,6 +145,7 @@ export function BookmarkButton({
                             isSaved && "fill-primary text-primary"
                         )}
                     />
+                    {showText && <span>{isSaved ? "Saved" : "Save"}</span>}
                 </Button>
             </motion.div>
         </div>

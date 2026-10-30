@@ -97,18 +97,7 @@ export function EventCategoryCard({
                     </div>
 
                     <div className="mt-5 flex flex-1 gap-5 items-end justify-between">
-                        <div className="w-fit flex items-center gap-2 rounded-full py-1.5 px-3 text-primary-foreground bg-primary dark:text-background">
-                            <BookmarkButton
-                                className={cn(
-                                    "text-xs font-semibold tracking-wide [&_button]:size-2! [&_button]:p-1.5! [&_button:hover]:bg-transparent!"
-                                )}
-                                variant="ghost"
-                            />
-                            <span className="text-xs font-semibold tracking-wide">
-                                Save
-                            </span>
-
-                        </div>
+                        <BookmarkButton showText />
                         {avatarItems && <AvatarStacked items={avatarItems} maxItems={3} size="sm" />}
                     </div>
 

@@ -19,12 +19,18 @@ export type EventCardProps = EventCardData & {
   href?: string,
 }
 
-type EventBadgesProps = Pick<EventCardProps, "category" | "price">
+type EventBadgesProps = Pick<EventCardProps, "category" | "price" | "eventTag" | "organizedBy">
 
-function EventBadges({ category, price }: EventBadgesProps) {
+function EventBadges({ category, price, eventTag, organizedBy }: EventBadgesProps) {
   return (
-    <div className="flex items-center justify-between gap-2">
+    <div className="flex items-center justify-between gap-2 flex-wrap">
       <Badge className="w-fit p-2.5">{category}</Badge>
+      {eventTag && (
+        <Badge className="w-fit p-2.5 bg-primary/20 text-primary border-primary/30">{eventTag}</Badge>
+      )}
+      {organizedBy && (
+        <Badge className="w-fit p-2.5 bg-green/20 text-green border-green/30">{organizedBy}</Badge>
+      )}
       {price && (
         <Badge className="w-fit bg-transparent text-lg text-white">{price}</Badge>
       )}
@@ -78,6 +84,8 @@ export function EventCard({
   date,
   location,
   price,
+  eventTag,
+  organizedBy,
   isBookmarked,
   actions = [],
   registerUrl,
@@ -122,7 +130,7 @@ export function EventCard({
 
         {/* Default content */}
         <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-5 text-white transition-all duration-300 sm:group-hover/card:opacity-0">
-          <EventBadges category={category} price={price} />
+                  <EventBadges category={category} price={price} eventTag={eventTag} organizedBy={organizedBy} />
           <EventDetails
             title={title}
             date={date}
@@ -135,7 +143,7 @@ export function EventCard({
       {/* Hover content */}
       <div className="absolute inset-x-0 bottom-0 z-20 hidden translate-y-0 flex-col gap-4 p-5 text-white opacity-0 ease-out transition-all duration-500 sm:flex sm:translate-y-4 sm:group-hover/card:translate-y-0 sm:group-hover/card:opacity-100">
         <div>
-          <EventBadges category={category} price={price} />
+                  <EventBadges category={category} price={price} eventTag={eventTag} organizedBy={organizedBy} />
           <EventDetails
             title={title}
             date={date}

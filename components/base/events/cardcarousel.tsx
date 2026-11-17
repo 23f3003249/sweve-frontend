@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
+import type { FeaturedPerson } from "@/components/ui/custom/carousel/featuredpeople"
 
 export type EventCardData = {
   id: string
@@ -18,11 +19,19 @@ export type EventCardData = {
   imageSrc: string
   imageAlt?: string
   date: string
+  eventTime?: string
   location: string
+  venue?: string
+  latitude?: number
+  longitude?: number
   price: string
   category: string
   registerUrl: string
   isBookmarked?: boolean
+  eventTag?: string
+  organizedBy?: string
+  description?: string
+  featuredPeople?: FeaturedPerson[]
 }
 
 type EventCarouselProps = {

@@ -13,7 +13,8 @@ const events: EventCardData[] = [
         location: "San Francisco, CA",
         price: "$455",
         category: "DESIGN",
-        registerUrl: "/events/event-1/register"
+        registerUrl: "/events/event-1/register",
+        description: "Join us for an exciting event featuring industry experts, networking opportunities, and hands-on workshops. This event brings together professionals from various backgrounds to share knowledge and build connections."
     },
     {
         id: "event-2",
@@ -24,7 +25,8 @@ const events: EventCardData[] = [
         location: "San Francisco, CA",
         price: "$455",
         category: "DESIGN",
-        registerUrl: "/events/event-2/register"
+        registerUrl: "/events/event-2/register",
+        description: "A comprehensive workshop covering the latest trends and best practices in modern design systems. Learn from industry leaders and gain hands-on experience."
     },
     {
         id: "event-3",
@@ -35,7 +37,8 @@ const events: EventCardData[] = [
         location: "San Francisco, CA",
         price: "$455",
         category: "DESIGN",
-        registerUrl: "/events/event-3/register"
+        registerUrl: "/events/event-3/register",
+        description: "An interactive session exploring cutting-edge technologies and their applications in real-world scenarios. Perfect for developers and tech enthusiasts."
     },
     {
         id: "event-4",
@@ -46,7 +49,8 @@ const events: EventCardData[] = [
         location: "San Francisco, CA",
         price: "$455",
         category: "DESIGN",
-        registerUrl: "/events/event-4/register"
+        registerUrl: "/events/event-4/register",
+        description: "Join industry experts for a deep dive into emerging technologies and their impact on business. Network with peers and gain valuable insights."
     },
 ]
 
